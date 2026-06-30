@@ -1,16 +1,31 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { PlayCircle, CheckCircle2, Clock } from "lucide-react";
-
-const ROUNDS = [
-  { id: "RND-9842", game: "Neon Crash", status: "live", pool: "$12,450", multiplier: "2.45x", time: "LIVE" },
-  { id: "RND-9843", game: "Cyber Roulette", status: "starting", pool: "$8,900", multiplier: "-", time: "00:12" },
-  { id: "RND-9841", game: "Neon Crash", status: "finished", pool: "$14,200", multiplier: "1.82x", winner: "House (Crash)" },
-  { id: "RND-9840", game: "Holo Dice", status: "finished", pool: "$5,400", multiplier: "3.00x", winner: "CryptoKing99" },
-  { id: "RND-9839", game: "Cyber Roulette", status: "finished", pool: "$21,000", multiplier: "14.00x", winner: "NeonSamurai" },
-];
+import { fetchAdminRounds } from "@/lib/api";
 
 export default function LiveRoundsPage() {
+  const [rounds, setRounds] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadRounds = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchAdminRounds();
+      setRounds(data || []);
+    } catch (err) {
+      console.error("Error loading rounds:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadRounds();
+    const interval = setInterval(loadRounds, 5000); // Live poll every 5s
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -37,17 +52,23 @@ export default function LiveRoundsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {ROUNDS.map((round) => (
-                <tr key={round.id} className={`hover:bg-white/[0.02] transition-colors ${round.status === 'live' ? 'bg-red-500/[0.02]' : ''}`}>
+              {loading && rounds.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    Loading live rounds...
+                  </td>
+                </tr>
+              ) : rounds.map((round) => (
+                <tr key={round.id} className={`hover:bg-white/[0.02] transition-colors ${round.status === 'locked' ? 'bg-red-500/[0.02]' : ''}`}>
                   <td className="px-6 py-4 font-mono text-gray-500">{round.id}</td>
                   <td className="px-6 py-4 font-medium text-white">{round.game}</td>
                   <td className="px-6 py-4">
-                    {round.status === 'live' && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30"><span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" /> LIVE</span>}
-                    {round.status === 'starting' && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30"><Clock className="w-3 h-3" /> {round.time}</span>}
-                    {round.status === 'finished' && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-gray-500/20 text-gray-400 border border-gray-500/30"><CheckCircle2 className="w-3 h-3" /> Finished</span>}
+                    {round.status === 'locked' && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30"><span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" /> Locked</span>}
+                    {round.status === 'betting' && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30"><Clock className="w-3 h-3" /> Betting</span>}
+                    {round.status === 'settled' && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-gray-500/20 text-gray-400 border border-gray-500/30"><CheckCircle2 className="w-3 h-3" /> Settled</span>}
                   </td>
                   <td className="px-6 py-4 font-mono text-white">{round.pool}</td>
-                  <td className={`px-6 py-4 font-black text-lg ${round.status === 'live' ? 'text-neon-blue drop-shadow-[0_0_5px_var(--color-neon-blue)]' : round.status === 'starting' ? 'text-gray-600' : 'text-neon-emerald'}`}>
+                  <td className={`px-6 py-4 font-black text-lg ${round.status === 'locked' ? 'text-neon-blue drop-shadow-[0_0_5px_var(--color-neon-blue)]' : round.status === 'betting' ? 'text-gray-600' : 'text-neon-emerald'}`}>
                     {round.multiplier}
                   </td>
                   <td className="px-6 py-4 text-gray-300">
@@ -55,6 +76,13 @@ export default function LiveRoundsPage() {
                   </td>
                 </tr>
               ))}
+              {rounds.length === 0 && !loading && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    No rounds found.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

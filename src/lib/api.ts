@@ -61,3 +61,15 @@ export async function fetchGatewayBalance() {
 	if (!res.ok) throw new Error("Failed to fetch gateway balance");
 	return res.json();
 }
+
+export async function fetchAdminBets() {
+	const res = await fetch(`${API_BASE_URL}/admin/bets`, { cache: 'no-store' });
+	if (!res.ok) throw new Error("Failed to fetch admin bets");
+	return res.json();
+}
+
+export async function fetchAdminRounds() {
+	const res = await fetch(`${API_BASE_URL}/admin/rounds`, { cache: 'no-store' });
+	if (!res.ok) throw new Error("Failed to fetch admin rounds");
+	return res.json();
+}

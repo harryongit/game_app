@@ -1,25 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Filter, Coins, CheckCircle, XCircle, Clock } from "lucide-react";
-
-const MOCK_BETS = Array.from({ length: 20 }).map((_, i) => ({
-  id: `BET-${1000 + i}`,
-  user: ["RahulM", "Sneha_99", "AkashP", "PriyaWin", "VikramX"][Math.floor(Math.random() * 5)],
-  game: ["Neon Crash", "Cyber Roulette", "Holo Dice", "Dragon Wheel"][Math.floor(Math.random() * 4)],
-  amount: Math.floor(Math.random() * 50000 + 500),
-  multiplier: (Math.random() * 10 + 1).toFixed(2),
-  status: ["won", "lost", "pending"][Math.floor(Math.random() * 3)],
-  time: new Date(Date.now() - Math.random() * 86400000).toLocaleTimeString(),
-}));
+import { fetchAdminBets } from "@/lib/api";
 
 export default function BetsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [bets, setBets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredBets = MOCK_BETS.filter(bet => {
+  const loadBets = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchAdminBets();
+      setBets(data || []);
+    } catch (err) {
+      console.error("Error loading bets:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadBets();
+    const interval = setInterval(loadBets, 5000); // Live poll every 5s
+    return () => clearInterval(interval);
+  }, []);
+
+  const filteredBets = bets.filter(bet => {
     const matchesSearch = bet.id.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          bet.user.toLowerCase().includes(searchTerm.toLowerCase());
+                          (bet.user && bet.user.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesStatus = statusFilter === "all" || bet.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -80,13 +91,19 @@ export default function BetsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">
-              {filteredBets.map((bet) => (
+              {loading && bets.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-gray-500">
+                    Loading live bets...
+                  </td>
+                </tr>
+              ) : filteredBets.map((bet) => (
                 <tr key={bet.id} className="hover:bg-white/[0.02] transition-colors">
                   <td className="p-4 font-mono text-sm text-gray-300">{bet.id}</td>
                   <td className="p-4">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-gradient-to-br from-neon-blue to-neon-purple flex items-center justify-center text-[10px] font-bold text-white">
-                        {bet.user.charAt(0)}
+                        {bet.user?.charAt(0)?.toUpperCase()}
                       </div>
                       <span className="font-medium text-white">{bet.user}</span>
                     </div>
@@ -94,17 +111,17 @@ export default function BetsPage() {
                   <td className="p-4 text-gray-300">{bet.game}</td>
                   <td className="p-4 font-medium text-white">₹{bet.amount.toLocaleString()}</td>
                   <td className="p-4">
-                    <span className="text-neon-purple font-bold">{bet.multiplier}x</span>
+                    <span className="text-neon-purple font-bold">{bet.multiplier}</span>
                   </td>
                   <td className="p-4">
                     {bet.status === "won" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neon-emerald/10 text-neon-emerald text-xs font-bold border border-neon-emerald/20"><CheckCircle className="w-3 h-3" /> Won</span>}
                     {bet.status === "lost" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold border border-red-500/20"><XCircle className="w-3 h-3" /> Lost</span>}
                     {bet.status === "pending" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold border border-yellow-500/20"><Clock className="w-3 h-3" /> Pending</span>}
                   </td>
-                  <td className="p-4 text-sm text-gray-500">{bet.time}</td>
+                  <td className="p-4 text-sm text-gray-500">{new Date(bet.time).toLocaleTimeString()}</td>
                 </tr>
               ))}
-              {filteredBets.length === 0 && (
+              {filteredBets.length === 0 && !loading && (
                 <tr>
                   <td colSpan={7} className="p-8 text-center text-gray-500">
                     No bets found matching your criteria.
