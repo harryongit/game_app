@@ -27,3 +27,31 @@ export async function updateAdminSettings(settings: Record<string, any>) {
   if (!res.ok) throw new Error("Failed to update settings");
   return res.json();
 }
+
+export async function fetchAdminUsers() {
+  const res = await fetch(`${API_BASE_URL}/admin/users`, { cache: 'no-store' });
+  if (!res.ok) throw new Error("Failed to fetch admin users");
+  return res.json();
+}
+
+export async function fetchAdminUserDetail(id: string) {
+  const res = await fetch(`${API_BASE_URL}/admin/users/${id}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error("Failed to fetch admin user detail");
+  return res.json();
+}
+
+export async function fetchAdminTransactions() {
+  const res = await fetch(`${API_BASE_URL}/admin/transactions`, { cache: 'no-store' });
+  if (!res.ok) throw new Error("Failed to fetch admin transactions");
+  return res.json();
+}
+
+export async function updateAdminTransactionStatus(id: string, status: string) {
+  const res = await fetch(`${API_BASE_URL}/admin/transactions/${id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) throw new Error("Failed to update transaction status");
+  return res.json();
+}

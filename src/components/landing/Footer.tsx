@@ -14,7 +14,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-8 text-center md:text-left">
           <div className="max-w-md">
             <h2 className="text-4xl font-black tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]">
-              BOLTPLAY
+              ProfitKing
             </h2>
             <p className="text-gray-400">
               The ultimate next-generation gaming and betting platform. Provably fair, lightning fast, and ultra-secure.
@@ -36,7 +36,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <p>© 2026 BoltPlay Inc. All rights reserved.</p>
+          <p>© 2026 ProfitKing Inc. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>

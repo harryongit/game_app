@@ -17,7 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "BoltPlay | Premium Spin & Win Experience",
+  title: "ProfitKing | Premium Spin & Win Experience",
   description: "Join the ultimate spin wheel experience. Spin daily, unlock massive rewards, and climb the leaderboard.",
 };
 

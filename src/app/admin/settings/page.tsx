@@ -18,11 +18,11 @@ export default function SettingsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-semibold text-gray-400 mb-2">Platform Name</label>
-              <input type="text" defaultValue="BoltPlay" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue/50" />
+              <input type="text" defaultValue="ProfitKing" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue/50" />
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-400 mb-2">Support Email</label>
-              <input type="email" defaultValue="support@boltplay.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue/50" />
+              <input type="email" defaultValue="support@ProfitKing.com" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue/50" />
             </div>
           </div>
         </div>
