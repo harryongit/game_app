@@ -52,6 +52,12 @@ export async function updateAdminTransactionStatus(id: string, status: string) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status }),
   });
-  if (!res.ok) throw new Error("Failed to update transaction status");
-  return res.json();
+	if (!res.ok) throw new Error("Failed to update transaction status");
+	return res.json();
+}
+
+export async function fetchGatewayBalance() {
+	const res = await fetch(`${API_BASE_URL}/admin/gateway-balance`, { cache: 'no-store' });
+	if (!res.ok) throw new Error("Failed to fetch gateway balance");
+	return res.json();
 }

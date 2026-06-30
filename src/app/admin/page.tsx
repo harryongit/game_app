@@ -4,11 +4,12 @@ import { motion } from "framer-motion";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Users, DollarSign, Activity, Database, Server, Zap, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useState, useEffect } from "react";
-import { fetchAdminStats, fetchAdminFeed } from "@/lib/api";
+import { fetchAdminStats, fetchAdminFeed, fetchGatewayBalance } from "@/lib/api";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [liveFeed, setLiveFeed] = useState<any[]>([]);
+  const [gatewayBalance, setGatewayBalance] = useState<string>("0.00");
 
   useEffect(() => {
     const loadData = async () => {
@@ -18,6 +19,11 @@ export default function AdminDashboard() {
 
         const feedData = await fetchAdminFeed();
         setLiveFeed(feedData || []);
+
+        const gatewayData = await fetchGatewayBalance();
+        if (gatewayData?.balance) {
+          setGatewayBalance(gatewayData.balance);
+        }
       } catch (err) {
         console.error("Error loading dashboard data", err);
       }
@@ -32,7 +38,7 @@ export default function AdminDashboard() {
     { label: "Total Bets Volume", value: `$${(stats?.total_bets || 0).toLocaleString()}`, icon: Activity, color: "neon-purple" },
     { label: "Total Payout", value: `$${(stats?.total_payout || 0).toLocaleString()}`, icon: DollarSign, color: "neon-emerald" },
     { label: "Net Profit", value: `$${(stats?.profit || 0).toLocaleString()}`, icon: DollarSign, color: "neon-magenta" },
-    { label: "Total Deposits", value: `$${(stats?.total_deposit || 0).toLocaleString()}`, icon: Database, color: "neon-blue" },
+    { label: "PayFromUPI Balance", value: `₹${gatewayBalance}`, icon: Database, color: "neon-blue" },
   ];
 
   return (
