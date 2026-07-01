@@ -117,3 +117,8 @@ export async function fetchAdminRounds() {
   const res = await fetch(`${API_BASE_URL}/admin/rounds`, { cache: 'no-store' });
   return handleResponse(res, "Failed to fetch admin rounds");
 }
+
+export async function fetchAdminRoundDetails(id: number) {
+  const res = await fetch(`${API_BASE_URL}/admin/rounds/${id}`, { cache: 'no-store' });
+  return handleResponse(res, `Failed to fetch details for round ${id}`);
+}

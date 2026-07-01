@@ -1,22 +1,23 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PlayCircle, CheckCircle2, Clock } from "lucide-react";
-import { fetchAdminRounds } from "@/lib/api";
+import { PlayCircle, CheckCircle2, Clock, X, TrendingUp, TrendingDown } from "lucide-react";
+import { fetchAdminRounds, fetchAdminRoundDetails } from "@/lib/api";
 
 export default function LiveRoundsPage() {
   const [rounds, setRounds] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRound, setSelectedRound] = useState<any>(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
 
   const loadRounds = async () => {
-    setLoading(true);
     try {
       const data = await fetchAdminRounds();
       setRounds(data || []);
     } catch (err) {
       console.error("Error loading rounds:", err);
     } finally {
-      setLoading(false);
+      if (loading) setLoading(false);
     }
   };
 
@@ -24,7 +25,25 @@ export default function LiveRoundsPage() {
     loadRounds();
     const interval = setInterval(loadRounds, 5000); // Live poll every 5s
     return () => clearInterval(interval);
-  }, []);
+  }, [loading]);
+
+  const handleRowClick = async (roundIdRaw: string) => {
+    // ID comes as RND-12345
+    const roundId = parseInt(roundIdRaw.replace('RND-', ''));
+    if (isNaN(roundId)) return;
+    
+    setDetailsLoading(true);
+    setSelectedRound({ id: roundIdRaw, round_id: roundId }); // Placeholder
+    
+    try {
+      const details = await fetchAdminRoundDetails(roundId);
+      setSelectedRound(details);
+    } catch (err) {
+      console.error("Error loading round details:", err);
+    } finally {
+      setDetailsLoading(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -59,7 +78,11 @@ export default function LiveRoundsPage() {
                   </td>
                 </tr>
               ) : rounds.map((round) => (
-                <tr key={round.id} className={`hover:bg-white/[0.02] transition-colors ${round.status === 'locked' ? 'bg-red-500/[0.02]' : ''}`}>
+                <tr 
+                  key={round.id} 
+                  onClick={() => handleRowClick(round.id)}
+                  className={`hover:bg-white/[0.05] cursor-pointer transition-colors ${round.status === 'locked' ? 'bg-red-500/[0.02]' : ''}`}
+                >
                   <td className="px-6 py-4 font-mono text-gray-500">{round.id}</td>
                   <td className="px-6 py-4 font-medium text-white">{round.game}</td>
                   <td className="px-6 py-4">
@@ -87,6 +110,96 @@ export default function LiveRoundsPage() {
           </table>
         </div>
       </div>
+
+      {/* Round Details Modal */}
+      {selectedRound && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="w-full max-w-4xl bg-[#1a1a24] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+              <h2 className="text-xl font-bold text-white">Round Details: {selectedRound.id}</h2>
+              <button onClick={() => setSelectedRound(null)} className="p-2 hover:bg-white/10 rounded-full transition">
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto space-y-6">
+              {detailsLoading ? (
+                <div className="py-12 text-center text-gray-500 animate-pulse">Loading detailed analysis...</div>
+              ) : (
+                <>
+                  {/* Summary Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                      <div className="text-sm text-gray-400 mb-1">Total Pool Collected</div>
+                      <div className="text-2xl font-bold text-white">${selectedRound.pool ?? 0}</div>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                      <div className="text-sm text-gray-400 mb-1">Total Payout (Lost)</div>
+                      <div className="text-2xl font-bold text-red-400">${selectedRound.payout ?? 0}</div>
+                    </div>
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                      <div className="text-sm text-gray-400 mb-1">Net House Profit</div>
+                      <div className={`text-2xl font-bold flex items-center gap-2 ${(selectedRound.profit ?? 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {(selectedRound.profit ?? 0) >= 0 ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
+                        ${selectedRound.profit ?? 0}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Bets Table */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-4">Detailed Bet Log</h3>
+                    <div className="bg-black/20 rounded-xl border border-white/5 overflow-hidden">
+                      <table className="w-full text-left text-sm text-gray-400">
+                        <thead className="bg-white/5 border-b border-white/5 text-gray-300 uppercase font-semibold text-xs">
+                          <tr>
+                            <th className="px-4 py-3">User</th>
+                            <th className="px-4 py-3">Mobile</th>
+                            <th className="px-4 py-3">Bet Number</th>
+                            <th className="px-4 py-3">Amount</th>
+                            <th className="px-4 py-3">Win/Loss</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/5">
+                          {selectedRound.bets && selectedRound.bets.length > 0 ? (
+                            selectedRound.bets.map((bet: any) => (
+                              <tr key={bet.id} className="hover:bg-white/[0.02]">
+                                <td className="px-4 py-3 text-white">{bet.username}</td>
+                                <td className="px-4 py-3 font-mono">{bet.mobile}</td>
+                                <td className="px-4 py-3">
+                                  <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white font-bold text-xs border border-white/20">
+                                    {bet.number}
+                                  </span>
+                                </td>
+                                <td className="px-4 py-3 font-mono">${bet.amount}</td>
+                                <td className="px-4 py-3">
+                                  {bet.win > 0 ? (
+                                    <span className="text-green-400 font-bold">+${bet.win}</span>
+                                  ) : selectedRound.status === 'settled' ? (
+                                    <span className="text-red-400">Lost</span>
+                                  ) : (
+                                    <span className="text-gray-500">Pending</span>
+                                  )}
+                                </td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan={5} className="px-4 py-6 text-center text-gray-500">
+                                No bets placed in this round.
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
