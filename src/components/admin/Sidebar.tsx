@@ -5,8 +5,9 @@ import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, PlayCircle, Coins, Wallet, Users, 
   ArrowRightLeft, BarChart3, Bell, ShieldAlert, Settings,
-  LogOut, Hexagon
+  LogOut, Hexagon, X
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const NAV_ITEMS = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -21,16 +22,22 @@ const NAV_ITEMS = [
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
-export function Sidebar() {
+export function Sidebar({ onCloseMobile }: { onCloseMobile?: () => void }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <aside className="w-64 flex flex-col bg-black/80 backdrop-blur-xl border-r border-white/5 h-screen sticky top-0">
-      <div className="h-16 flex items-center px-6 border-b border-white/5">
+      <div className="h-16 flex items-center justify-between px-6 border-b border-white/5 shrink-0">
         <Link href="/" className="flex items-center gap-2 group">
           <Hexagon className="w-8 h-8 text-neon-blue group-hover:text-neon-purple transition-colors drop-shadow-[0_0_8px_var(--color-neon-blue)]" />
           <span className="font-black text-xl tracking-widest text-white">CMD<span className="text-neon-blue">CTR</span></span>
         </Link>
+        {onCloseMobile && (
+          <button onClick={onCloseMobile} className="md:hidden p-2 -mr-2 text-gray-400 hover:text-white rounded-lg hover:bg-white/10">
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar">
@@ -53,8 +60,14 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-white/5">
-        <button className="flex items-center gap-3 w-full px-3 py-2 text-gray-400 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10">
+      <div className="p-4 border-t border-white/5 shrink-0">
+        <button 
+          onClick={() => {
+            document.cookie = "admin_session=; path=/; max-age=0;";
+            router.push("/login");
+          }}
+          className="flex items-center gap-3 w-full px-3 py-2 text-gray-400 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
+        >
           <LogOut className="w-5 h-5" />
           <span className="font-medium text-sm">Logout</span>
         </button>

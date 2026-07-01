@@ -78,16 +78,16 @@ export default function BetsPage() {
 
       <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+          <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
-              <tr className="border-b border-white/5 bg-white/5">
-                <th className="p-4 text-sm font-semibold text-gray-400">Bet ID</th>
-                <th className="p-4 text-sm font-semibold text-gray-400">User</th>
-                <th className="p-4 text-sm font-semibold text-gray-400">Game</th>
-                <th className="p-4 text-sm font-semibold text-gray-400">Amount (₹)</th>
-                <th className="p-4 text-sm font-semibold text-gray-400">Multiplier</th>
-                <th className="p-4 text-sm font-semibold text-gray-400">Status</th>
-                <th className="p-4 text-sm font-semibold text-gray-400">Time</th>
+              <tr className="border-b border-white/5 bg-white/[0.02]">
+                <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Bet ID</th>
+                <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">User</th>
+                <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Game</th>
+                <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Amount</th>
+                <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Multiplier</th>
+                <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Status</th>
+                <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Time</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">

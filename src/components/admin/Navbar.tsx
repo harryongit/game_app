@@ -1,17 +1,25 @@
 "use client";
 
-import { Bell, Search, Activity, User } from "lucide-react";
+import { Bell, Search, Activity, User, Menu } from "lucide-react";
 
-export function Navbar() {
+export function Navbar({ onMenuClick }: { onMenuClick?: () => void }) {
   return (
-    <header className="h-16 flex items-center justify-between px-6 bg-black/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-30">
-      <div className="flex items-center gap-4">
-        <div className="relative">
+    <header className="h-16 flex items-center justify-between px-4 md:px-6 bg-black/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-30">
+      <div className="flex items-center gap-2 md:gap-4 w-full md:w-auto">
+        {onMenuClick && (
+          <button 
+            onClick={onMenuClick}
+            className="md:hidden p-2 -ml-2 text-gray-400 hover:text-white rounded-lg hover:bg-white/10"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
+        <div className="relative flex-1 md:flex-none">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input 
             type="text" 
-            placeholder="Search TXID, User ID, Game..." 
-            className="pl-9 pr-4 py-1.5 w-64 md:w-96 rounded-full bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-neon-blue/50 focus:ring-1 focus:ring-neon-blue/50 transition-all text-white placeholder-gray-500"
+            placeholder="Search..." 
+            className="pl-9 pr-4 py-1.5 w-full md:w-96 rounded-full bg-white/5 border border-white/10 text-sm focus:outline-none focus:border-neon-blue/50 focus:ring-1 focus:ring-neon-blue/50 transition-all text-white placeholder-gray-500"
           />
         </div>
       </div>
