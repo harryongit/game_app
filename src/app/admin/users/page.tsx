@@ -64,7 +64,7 @@ export default function UsersPage() {
                       <div className="text-xs text-gray-500">{user.mobile}</div>
                     </td>
                     <td className="px-6 py-4 text-gray-400">{user.email || "-"}</td>
-                    <td className="px-6 py-4 font-mono text-neon-blue group-hover:drop-shadow-[0_0_5px_var(--color-neon-blue)] transition-all">${user.balance_cached}</td>
+                    <td className="px-6 py-4 font-mono text-neon-blue group-hover:drop-shadow-[0_0_5px_var(--color-neon-blue)] transition-all">₹{user.balance_cached}</td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-bold ${!user.is_blocked ? 'text-neon-emerald bg-neon-emerald/10' : 'text-red-500 bg-red-500/10'}`}>
                         {!user.is_blocked ? (

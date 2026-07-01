@@ -135,7 +135,7 @@ export default function TransactionsPage() {
                     </td>
                     <td className="p-4 font-mono text-sm text-gray-400">#{tx.id}</td>
                     <td className="p-4 font-medium text-white">{tx.username || "Anonymous"}</td>
-                    <td className="p-4 font-bold text-white">${Math.abs(tx.amount)}</td>
+                    <td className="p-4 font-bold text-white">₹{Math.abs(tx.amount)}</td>
                     <td className="p-4">
                       {tx.status === "success" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neon-emerald/10 text-neon-emerald text-xs font-bold border border-neon-emerald/20"><CheckCircle className="w-3 h-3" /> Approved</span>}
                       {tx.status === "failed" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold border border-red-500/20"><XCircle className="w-3 h-3" /> Rejected</span>}

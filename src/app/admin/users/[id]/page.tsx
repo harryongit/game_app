@@ -21,6 +21,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
   const [isBlocking, setIsBlocking] = useState(false);
   const [isSavingLimit, setIsSavingLimit] = useState(false);
   const [isSavingBalance, setIsSavingBalance] = useState(false);
+  const [address, setAddress] = useState<string | null>(null);
 
   useEffect(() => {
     fetchAdminUserDetail(resolvedParams.id)
@@ -56,6 +57,20 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
       setLimitInput(user.limit?.toString() || "0");
     }
   }, [user]);
+
+  useEffect(() => {
+    const loc = user?.mobile_data?.location;
+    if (loc && loc.lat && loc.lng && !address) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${loc.lat}&lon=${loc.lng}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.display_name) {
+            setAddress(data.display_name);
+          }
+        })
+        .catch(err => console.error("Geocoding failed", err));
+    }
+  }, [user, address]);
 
   if (loading) return <div className="p-8 text-center text-gray-400">Loading user details...</div>;
   if (!user) return <div className="p-8 text-center text-red-400">User not found</div>;
@@ -201,7 +216,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
             </div>
             <div className="flex justify-between pt-2">
               <span className="text-gray-400">Wallet Balance</span>
-              <span className="text-neon-blue font-bold text-lg">${user.balance_cached}</span>
+              <span className="text-neon-blue font-bold text-lg">₹{user.balance_cached}</span>
             </div>
           </div>
         </div>
@@ -248,11 +263,15 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
             <div className="space-y-3 text-sm">
               <div className="flex justify-between border-b border-white/5 pb-2">
                 <span className="text-gray-400">Latitude</span>
-                <span className="text-white font-mono">{user.mobile_data.location.latitude}</span>
+                <span className="text-white font-mono">{user.mobile_data.location.lat ?? user.mobile_data.location.latitude}</span>
               </div>
               <div className="flex justify-between border-b border-white/5 pb-2">
                 <span className="text-gray-400">Longitude</span>
-                <span className="text-white font-mono">{user.mobile_data.location.longitude}</span>
+                <span className="text-white font-mono">{user.mobile_data.location.lng ?? user.mobile_data.location.longitude}</span>
+              </div>
+              <div className="flex justify-between border-b border-white/5 pb-2">
+                <span className="text-gray-400">Place (Address)</span>
+                <span className="text-white text-right max-w-[60%]">{address ? address : <span className="text-gray-500 animate-pulse">Calculating...</span>}</span>
               </div>
               {user.mobile_data.location.timestamp && (
                 <div className="flex justify-between pt-2">

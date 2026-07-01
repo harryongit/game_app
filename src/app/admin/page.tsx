@@ -35,9 +35,9 @@ export default function AdminDashboard() {
   }, []);
 
   const kpis = [
-    { label: "Total Bets Volume", value: `$${(stats?.total_bets || 0).toLocaleString()}`, icon: Activity, color: "neon-purple" },
-    { label: "Total Payout", value: `$${(stats?.total_payout || 0).toLocaleString()}`, icon: DollarSign, color: "neon-emerald" },
-    { label: "Net Profit", value: `$${(stats?.profit || 0).toLocaleString()}`, icon: DollarSign, color: "neon-magenta" },
+    { label: "Total Bets Volume", value: `₹${(stats?.total_bets || 0).toLocaleString()}`, icon: Activity, color: "neon-purple" },
+    { label: "Total Payout", value: `₹${(stats?.total_payout || 0).toLocaleString()}`, icon: DollarSign, color: "neon-emerald" },
+    { label: "Net Profit", value: `₹${(stats?.profit || 0).toLocaleString()}`, icon: DollarSign, color: "neon-magenta" },
     { label: "PayFromUPI Balance", value: `₹${gatewayBalance}`, icon: Database, color: "neon-blue" },
   ];
 
@@ -82,7 +82,7 @@ export default function AdminDashboard() {
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="time" stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `$${val}`} />
+                <YAxis stroke="#52525b" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(val) => `₹${val}`} />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#050505', borderColor: '#333', borderRadius: '8px' }}
                   itemStyle={{ color: '#00f3ff' }}
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="text-right">
                       <p className={`font-mono font-semibold ${feed.action === 'win' ? 'text-neon-emerald' : feed.action === 'bet' ? 'text-neon-purple' : 'text-white'}`}>
-                        ${feed.amount.toLocaleString()}
+                        ₹{feed.amount.toLocaleString()}
                       </p>
                       <p className="text-xs text-gray-500">{new Date(feed.time).toLocaleTimeString()}</p>
                     </div>
