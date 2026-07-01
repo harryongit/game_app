@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://187.127.162.32"; // Or env var
+const API_BASE_URL = "/api-proxy"; // Uses Next.js rewrites in next.config.ts to avoid mixed-content (HTTP) blocked error
 
 export async function fetchAdminStats() {
   const res = await fetch(`${API_BASE_URL}/admin/stats`, { cache: 'no-store' });
