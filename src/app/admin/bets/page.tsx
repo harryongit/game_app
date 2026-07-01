@@ -139,7 +139,9 @@ export default function BetsPage() {
                       <span className="font-medium text-white">{bet.user}</span>
                     </div>
                   </td>
-                  <td className="p-4 text-gray-300">{bet.game}</td>
+                  <td className="p-4 text-gray-300">
+                    {bet.game === 'spinwheel' ? 'Spinwheel' : (bet.game === 'spinwheelpro' ? 'Spinwheel Pro' : bet.game)}
+                  </td>
                   <td className="p-4 font-medium text-white">₹{bet.amount.toLocaleString()}</td>
                   <td className="p-4">
                     <span className="text-neon-purple font-bold">{bet.multiplier}</span>

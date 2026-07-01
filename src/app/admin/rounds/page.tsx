@@ -154,7 +154,7 @@ export default function LiveRoundsPage() {
                         <thead className="bg-white/5 border-b border-white/5 text-gray-300 uppercase font-semibold text-xs">
                           <tr>
                             <th className="px-4 py-3">User</th>
-                            <th className="px-4 py-3">Mobile</th>
+                            <th className="px-4 py-3">Game</th>
                             <th className="px-4 py-3">Bet Number</th>
                             <th className="px-4 py-3">Amount</th>
                             <th className="px-4 py-3">Win/Loss</th>
@@ -164,17 +164,17 @@ export default function LiveRoundsPage() {
                           {selectedRound.bets && selectedRound.bets.length > 0 ? (
                             selectedRound.bets.map((bet: any) => (
                               <tr key={bet.id} className="hover:bg-white/[0.02]">
-                                <td className="px-4 py-3 text-white">{bet.username}</td>
-                                <td className="px-4 py-3 font-mono">{bet.mobile}</td>
+                                <td className="px-4 py-3 text-white">{bet.user}</td>
+                                <td className="px-4 py-3 text-gray-400 capitalize">{bet.game === 'spinwheel' ? 'Spinwheel' : (bet.game === 'spinwheelpro' ? 'Spinwheel Pro' : bet.game)}</td>
                                 <td className="px-4 py-3">
                                   <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white font-bold text-xs border border-white/20">
                                     {bet.number}
                                   </span>
                                 </td>
-                                <td className="px-4 py-3 font-mono">${bet.amount}</td>
+                                <td className="px-4 py-3 font-mono">₹{bet.amount}</td>
                                 <td className="px-4 py-3">
-                                  {bet.win > 0 ? (
-                                    <span className="text-green-400 font-bold">+${bet.win}</span>
+                                  {bet.payout > 0 ? (
+                                    <span className="text-green-400 font-bold">+₹{bet.payout}</span>
                                   ) : selectedRound.status === 'settled' ? (
                                     <span className="text-red-400">Lost</span>
                                   ) : (

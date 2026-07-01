@@ -30,9 +30,10 @@ export default function AnalyticsPage() {
   
   const rtp = stats?.total_bets > 0 ? ((stats.total_payout / stats.total_bets) * 100).toFixed(1) : "0.0";
 
-  const gameData = [
-    { name: "Spinwheel", value: 100 }, // Only Spinwheel active for now
-  ];
+  const gameData = stats?.game_stats?.map((g: any) => ({
+    name: g.name === 'spinwheel' ? 'Spinwheel' : (g.name === 'spinwheelpro' ? 'Spinwheel Pro' : g.name),
+    value: g.total_bets_count,
+  })) || [{ name: "Spinwheel", value: 100 }]; // fallback if no data
 
   return (
     <div className="space-y-6">
@@ -129,7 +130,7 @@ export default function AnalyticsPage() {
               {gameData.map((entry, i) => (
                 <div key={entry.name} className="flex items-center gap-2 text-xs text-gray-400">
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[i] }} />
-                  {entry.name} ({entry.value}%)
+                  {entry.name} ({entry.value} bets)
                 </div>
               ))}
             </div>
