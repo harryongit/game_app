@@ -11,10 +11,12 @@ export default function TransactionsPage() {
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const loadData = () => {
     setLoading(true);
-    fetchAdminTransactions()
+    fetchAdminTransactions(startDate, endDate)
       .then((data) => {
         setTransactions(data || []);
         setLoading(false);
@@ -28,7 +30,7 @@ export default function TransactionsPage() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [startDate, endDate]);
 
   const handleUpdateStatus = async (id: number, status: string) => {
     try {
@@ -93,6 +95,35 @@ export default function TransactionsPage() {
               {type}s
             </button>
           ))}
+        </div>
+      </div>
+      
+      <div className="flex gap-4 mb-4">
+        <div className="flex flex-col gap-1 text-sm text-gray-400">
+          <label>Start Date</label>
+          <input 
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-neon-blue/50"
+          />
+        </div>
+        <div className="flex flex-col gap-1 text-sm text-gray-400">
+          <label>End Date</label>
+          <input 
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-white focus:outline-none focus:border-neon-blue/50"
+          />
+        </div>
+        <div className="flex items-end pb-1">
+          <button 
+            onClick={() => { setStartDate(""); setEndDate(""); }}
+            className="text-red-400 hover:text-red-300 px-2 py-1 text-sm"
+          >
+            Clear Dates
+          </button>
         </div>
       </div>
 

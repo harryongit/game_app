@@ -77,8 +77,14 @@ export async function addAdminUserBalance(userId: number, amount: number) {
   return handleResponse(res, "Failed to add user balance");
 }
 
-export async function fetchAdminTransactions() {
-  const res = await fetch(`${API_BASE_URL}/admin/transactions`, { cache: 'no-store' });
+export async function fetchAdminTransactions(startDate?: string, endDate?: string) {
+  let url = `${API_BASE_URL}/admin/transactions`;
+  const params = new URLSearchParams();
+  if (startDate) params.append('start_date', startDate);
+  if (endDate) params.append('end_date', endDate);
+  if (params.toString()) url += `?${params.toString()}`;
+  
+  const res = await fetch(url, { cache: 'no-store' });
   return handleResponse(res, "Failed to fetch admin transactions");
 }
 
@@ -96,8 +102,14 @@ export async function fetchGatewayBalance() {
   return handleResponse(res, "Failed to fetch gateway balance");
 }
 
-export async function fetchAdminBets() {
-  const res = await fetch(`${API_BASE_URL}/admin/bets`, { cache: 'no-store' });
+export async function fetchAdminBets(startDate?: string, endDate?: string) {
+  let url = `${API_BASE_URL}/admin/bets`;
+  const params = new URLSearchParams();
+  if (startDate) params.append('start_date', startDate);
+  if (endDate) params.append('end_date', endDate);
+  if (params.toString()) url += `?${params.toString()}`;
+
+  const res = await fetch(url, { cache: 'no-store' });
   return handleResponse(res, "Failed to fetch admin bets");
 }
 
