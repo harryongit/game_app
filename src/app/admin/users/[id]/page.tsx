@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, use, useMemo } from "react";
-import { fetchAdminUserDetail } from "@/lib/api";
-import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search } from "lucide-react";
+import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit } from "@/lib/api";
+import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 
 export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -57,6 +57,60 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Admin Actions */}
+        <div className="glass-panel p-6 rounded-xl space-y-4 md:col-span-2 border border-red-500/20 bg-red-500/5">
+          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <ShieldAlert className="w-5 h-5 text-red-500" /> Admin Management Actions
+          </h3>
+          <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+            <div className="flex-1">
+              <p className="text-sm text-gray-400 mb-2">Block or unblock this user account immediately.</p>
+              <button 
+                onClick={async () => {
+                  try {
+                    const newStatus = !user.is_blocked;
+                    await blockAdminUser(user.id, newStatus);
+                    setUser({ ...user, is_blocked: newStatus });
+                    alert(`User successfully ${newStatus ? 'blocked' : 'unblocked'}.`);
+                  } catch(e) {
+                    alert("Failed to block/unblock user.");
+                  }
+                }}
+                className={`px-6 py-2.5 rounded-lg font-bold transition-all ${user.is_blocked ? 'bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'bg-white/10 hover:bg-red-500/20 hover:text-red-500 text-white'}`}
+              >
+                {user.is_blocked ? "ACCOUNT BLOCKED (Click to Unblock)" : "BLOCK ACCOUNT"}
+              </button>
+            </div>
+            <div className="flex-1 w-full sm:w-auto">
+               <p className="text-sm text-gray-400 mb-2">Update User Custom Limit</p>
+               <div className="flex gap-2">
+                 <input 
+                   type="number" 
+                   id="limitInput"
+                   defaultValue={user.limit || 0}
+                   className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white flex-1"
+                   placeholder="Enter new limit"
+                 />
+                 <button 
+                   onClick={async () => {
+                     const inputVal = (document.getElementById('limitInput') as HTMLInputElement).value;
+                     try {
+                       await setAdminUserLimit(user.id, parseInt(inputVal) || 0);
+                       setUser({ ...user, limit: parseInt(inputVal) || 0 });
+                       alert("User limit updated.");
+                     } catch(e) {
+                       alert("Failed to update limit.");
+                     }
+                   }}
+                   className="px-4 py-2 bg-neon-blue/20 text-neon-blue font-bold rounded-lg hover:bg-neon-blue/30 transition-colors"
+                 >
+                   Save Limit
+                 </button>
+               </div>
+            </div>
+          </div>
+        </div>
+
         {/* Basic Info */}
         <div className="glass-panel p-6 rounded-xl space-y-4">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">

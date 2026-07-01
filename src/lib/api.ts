@@ -40,6 +40,26 @@ export async function fetchAdminUserDetail(id: string) {
   return res.json();
 }
 
+export async function blockAdminUser(userId: number, isBlocked: boolean) {
+  const res = await fetch(`${API_BASE_URL}/admin/user/block`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId, is_blocked: isBlocked }),
+  });
+  if (!res.ok) throw new Error("Failed to update block status");
+  return res.json();
+}
+
+export async function setAdminUserLimit(userId: number, limit: number) {
+  const res = await fetch(`${API_BASE_URL}/admin/user/limit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId, limit }),
+  });
+  if (!res.ok) throw new Error("Failed to set user limit");
+  return res.json();
+}
+
 export async function fetchAdminTransactions() {
   const res = await fetch(`${API_BASE_URL}/admin/transactions`, { cache: 'no-store' });
   if (!res.ok) throw new Error("Failed to fetch admin transactions");
