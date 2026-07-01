@@ -1,4 +1,5 @@
 import { AdminLayoutWrapper } from "@/components/admin/AdminLayoutWrapper";
+import { Toaster } from "sonner";
 
 export default function AdminLayout({
   children,
@@ -8,6 +9,7 @@ export default function AdminLayout({
   return (
     <AdminLayoutWrapper>
       {children}
+      <Toaster theme="dark" richColors position="top-right" />
     </AdminLayoutWrapper>
   );
 }

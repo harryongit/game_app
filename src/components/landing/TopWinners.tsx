@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 import { Trophy, TrendingUp, Medal } from "lucide-react";
 
 const WINNERS = [
-  { rank: 1, user: "CryptoKing99", game: "Mega Spin Wheel", multiplier: "1,250x", payout: "125,000 Pts", color: "neon-blue" },
-  { rank: 2, user: "HoloTrader", game: "Daily Free Spin", multiplier: "850x", payout: "85,000 Pts", color: "neon-purple" },
-  { rank: 3, user: "NeonSamurai", game: "VIP Fortune Wheel", multiplier: "500x", payout: "50,000 Pts", color: "neon-emerald" },
-  { rank: 4, user: "Anon8472", game: "Mega Spin Wheel", multiplier: "250x", payout: "25,000 Pts", color: "white" },
-  { rank: 5, user: "WhaleHunter", game: "Daily Free Spin", multiplier: "100x", payout: "10,000 Pts", color: "white" },
+  { rank: 1, user: "Rahul K.", game: "Kalyan Matka", multiplier: "1,250x", payout: "₹1,25,000", color: "neon-blue" },
+  { rank: 2, user: "Vikram S.", game: "Milan Day", multiplier: "850x", payout: "₹85,000", color: "neon-purple" },
+  { rank: 3, user: "Pooja M.", game: "Rajdhani Night", multiplier: "500x", payout: "₹50,000", color: "neon-emerald" },
+  { rank: 4, user: "Amit D.", game: "Kalyan Night", multiplier: "250x", payout: "₹25,000", color: "white" },
+  { rank: 5, user: "Suresh P.", game: "Main Bazar", multiplier: "100x", payout: "₹10,000", color: "white" },
 ];
 
 export function TopWinners() {

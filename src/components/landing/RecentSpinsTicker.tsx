@@ -1,13 +1,13 @@
 "use client";
 
 const TICKER_ITEMS = [
-  { text: "Mega Spin 10x Reward 🔥", hot: true },
-  { text: "Daily Lucky +180 Points", hot: false },
-  { text: "Fortune Wheel BIG WIN", hot: true },
-  { text: "VIP Spin Claimed 14x", hot: false },
-  { text: "Neon Spin 99% Return", hot: false },
-  { text: "Cyber Spin ⚡ HIGH REWARD", hot: true },
-  { text: "Gold Wheel 12x Multiplier", hot: false },
+  { text: "Rahul K. Won ₹1,25,000 on Kalyan Matka 🔥", hot: true },
+  { text: "Vikram S. Withdrew ₹85,000", hot: false },
+  { text: "Pooja M. BIG WIN on Rajdhani Night", hot: true },
+  { text: "Amit D. Claimed VIP Reward", hot: false },
+  { text: "Suresh P. 99% Return on Main Bazar", hot: false },
+  { text: "Rajesh V. ⚡ HIGH REWARD", hot: true },
+  { text: "Neha M. Won ₹50,000", hot: false },
 ];
 
 export function RecentSpinsTicker() {

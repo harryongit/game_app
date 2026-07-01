@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowUpRight, ArrowDownLeft, Search, Filter, RefreshCw, CheckCircle, XCircle } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, Search, Filter, RefreshCw, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { fetchAdminTransactions, updateAdminTransactionStatus } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function TransactionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [transactions, setTransactions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [processingId, setProcessingId] = useState<number | null>(null);
 
   const loadData = () => {
     setLoading(true);
@@ -19,6 +21,7 @@ export default function TransactionsPage() {
       })
       .catch((err) => {
         console.error("Failed to load transactions", err);
+        toast.error("Failed to load transactions: " + err.message);
         setLoading(false);
       });
   };
@@ -29,14 +32,18 @@ export default function TransactionsPage() {
 
   const handleUpdateStatus = async (id: number, status: string) => {
     try {
+      setProcessingId(id);
       await updateAdminTransactionStatus(id.toString(), status);
       // Optimistic update
       setTransactions((prev) => 
         prev.map(tx => tx.id === id ? { ...tx, status } : tx)
       );
-    } catch (err) {
+      toast.success(`Transaction ${status === 'success' ? 'approved' : 'rejected'} successfully.`);
+    } catch (err: any) {
       console.error("Failed to update status", err);
-      alert("Error updating transaction status.");
+      toast.error("Error updating transaction status: " + err.message);
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -141,18 +148,20 @@ export default function TransactionsPage() {
                       {tx.status === "pending" ? (
                         <div className="flex justify-end gap-2">
                           <button 
+                            disabled={processingId === tx.id}
                             onClick={() => handleUpdateStatus(tx.id, "success")}
-                            className="p-2 bg-neon-emerald/10 hover:bg-neon-emerald/20 text-neon-emerald rounded-lg transition-colors border border-neon-emerald/20"
+                            className="p-2 bg-neon-emerald/10 hover:bg-neon-emerald/20 text-neon-emerald rounded-lg transition-colors border border-neon-emerald/20 disabled:opacity-50"
                             title="Approve"
                           >
-                            <CheckCircle className="w-4 h-4" />
+                            {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                           </button>
                           <button 
+                            disabled={processingId === tx.id}
                             onClick={() => handleUpdateStatus(tx.id, "failed")}
-                            className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors border border-red-500/20"
+                            className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors border border-red-500/20 disabled:opacity-50"
                             title="Reject"
                           >
-                            <XCircle className="w-4 h-4" />
+                            {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
                           </button>
                         </div>
                       ) : (

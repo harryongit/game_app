@@ -1,21 +1,34 @@
 const API_BASE_URL = "/api-proxy"; // Uses Next.js rewrites in next.config.ts to avoid mixed-content (HTTP) blocked error
 
+// Helper to safely parse and throw meaningful API errors for toast notifications
+async function handleResponse(res: Response, defaultErrorMsg: string) {
+  if (!res.ok) {
+    try {
+      const errorData = await res.json();
+      throw new Error(errorData.error || errorData.message || defaultErrorMsg);
+    } catch (e: any) {
+      if (e.message && e.message !== 'Unexpected end of JSON input') {
+        throw new Error(e.message);
+      }
+      throw new Error(defaultErrorMsg);
+    }
+  }
+  return res.json();
+}
+
 export async function fetchAdminStats() {
   const res = await fetch(`${API_BASE_URL}/admin/stats`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch admin stats");
-  return res.json();
+  return handleResponse(res, "Failed to fetch admin stats");
 }
 
 export async function fetchAdminFeed() {
   const res = await fetch(`${API_BASE_URL}/admin/feed`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch admin feed");
-  return res.json();
+  return handleResponse(res, "Failed to fetch admin feed");
 }
 
 export async function fetchAdminSettings() {
   const res = await fetch(`${API_BASE_URL}/admin/settings`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch admin settings");
-  return res.json();
+  return handleResponse(res, "Failed to fetch admin settings");
 }
 
 export async function updateAdminSettings(settings: Record<string, any>) {
@@ -24,20 +37,17 @@ export async function updateAdminSettings(settings: Record<string, any>) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(settings),
   });
-  if (!res.ok) throw new Error("Failed to update settings");
-  return res.json();
+  return handleResponse(res, "Failed to update settings");
 }
 
 export async function fetchAdminUsers() {
   const res = await fetch(`${API_BASE_URL}/admin/users`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch admin users");
-  return res.json();
+  return handleResponse(res, "Failed to fetch admin users");
 }
 
 export async function fetchAdminUserDetail(id: string) {
   const res = await fetch(`${API_BASE_URL}/admin/users/${id}`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch admin user detail");
-  return res.json();
+  return handleResponse(res, "Failed to fetch admin user detail");
 }
 
 export async function blockAdminUser(userId: number, isBlocked: boolean) {
@@ -46,8 +56,7 @@ export async function blockAdminUser(userId: number, isBlocked: boolean) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ user_id: userId, is_blocked: isBlocked }),
   });
-  if (!res.ok) throw new Error("Failed to update block status");
-  return res.json();
+  return handleResponse(res, "Failed to update block status");
 }
 
 export async function setAdminUserLimit(userId: number, limit: number) {
@@ -56,8 +65,7 @@ export async function setAdminUserLimit(userId: number, limit: number) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ user_id: userId, limit }),
   });
-  if (!res.ok) throw new Error("Failed to set user limit");
-  return res.json();
+  return handleResponse(res, "Failed to set user limit");
 }
 
 export async function addAdminUserBalance(userId: number, amount: number) {
@@ -66,14 +74,12 @@ export async function addAdminUserBalance(userId: number, amount: number) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ user_id: userId, amount }),
   });
-  if (!res.ok) throw new Error("Failed to add user balance");
-  return res.json();
+  return handleResponse(res, "Failed to add user balance");
 }
 
 export async function fetchAdminTransactions() {
   const res = await fetch(`${API_BASE_URL}/admin/transactions`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch admin transactions");
-  return res.json();
+  return handleResponse(res, "Failed to fetch admin transactions");
 }
 
 export async function updateAdminTransactionStatus(id: string, status: string) {
@@ -82,24 +88,20 @@ export async function updateAdminTransactionStatus(id: string, status: string) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status }),
   });
-  if (!res.ok) throw new Error("Failed to update transaction status");
-  return res.json();
+  return handleResponse(res, "Failed to update transaction status");
 }
 
 export async function fetchGatewayBalance() {
   const res = await fetch(`${API_BASE_URL}/admin/gateway-balance`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch gateway balance");
-  return res.json();
+  return handleResponse(res, "Failed to fetch gateway balance");
 }
 
 export async function fetchAdminBets() {
   const res = await fetch(`${API_BASE_URL}/admin/bets`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch admin bets");
-  return res.json();
+  return handleResponse(res, "Failed to fetch admin bets");
 }
 
 export async function fetchAdminRounds() {
   const res = await fetch(`${API_BASE_URL}/admin/rounds`, { cache: 'no-store' });
-  if (!res.ok) throw new Error("Failed to fetch admin rounds");
-  return res.json();
+  return handleResponse(res, "Failed to fetch admin rounds");
 }

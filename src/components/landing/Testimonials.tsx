@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 
 const REVIEWS = [
-  { name: "CryptoKing99", text: "The WebSocket sync is insane. Zero delay on my bets.", role: "High Roller", color: "neon-blue" },
-  { name: "NeonSamurai", text: "Best UI I've seen in Web3 gaming. Payouts are instant.", role: "Pro Bettor", color: "neon-purple" },
-  { name: "HoloTrader", text: "Provably fair system actually works. Tested the hashes myself.", role: "Developer", color: "neon-emerald" }
+  { name: "Rahul K.", text: "The app is super fast. Zero delay on my bets and results are instant.", role: "High Roller", color: "neon-blue" },
+  { name: "Vikram S.", text: "Best UI I've seen in gaming. Withdrawals are processed immediately to my bank.", role: "Pro Bettor", color: "neon-purple" },
+  { name: "Pooja M.", text: "100% trusted platform. Tested the withdrawal myself and it was flawless.", role: "Daily Player", color: "neon-emerald" }
 ];
 
 export function Testimonials() {

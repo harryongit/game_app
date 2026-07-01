@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Save, RefreshCw } from "lucide-react";
 import { fetchAdminSettings, updateAdminSettings } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<any>({
@@ -25,8 +26,9 @@ export default function SettingsPage() {
       if (data && Object.keys(data).length > 0) {
         setSettings((prev: any) => ({ ...prev, ...data }));
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to fetch settings", err);
+      toast.error("Failed to load settings: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -40,10 +42,10 @@ export default function SettingsPage() {
     setSaving(true);
     try {
       await updateAdminSettings(settings);
-      alert("Settings saved successfully!");
-    } catch (err) {
+      toast.success("Settings saved successfully!");
+    } catch (err: any) {
       console.error("Failed to save", err);
-      alert("Failed to save settings.");
+      toast.error("Failed to save settings: " + err.message);
     } finally {
       setSaving(false);
     }

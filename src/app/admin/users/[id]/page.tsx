@@ -2,8 +2,9 @@
 
 import { useState, useEffect, use, useMemo } from "react";
 import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit, addAdminUserBalance } from "@/lib/api";
-import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search, ShieldAlert } from "lucide-react";
+import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search, ShieldAlert, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -13,6 +14,13 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
   // For Contacts
   const [contactSearch, setContactSearch] = useState("");
   const [visibleContacts, setVisibleContacts] = useState(50);
+  
+  // Admin Action States
+  const [limitInput, setLimitInput] = useState<string>("");
+  const [balanceInput, setBalanceInput] = useState<string>("");
+  const [isBlocking, setIsBlocking] = useState(false);
+  const [isSavingLimit, setIsSavingLimit] = useState(false);
+  const [isSavingBalance, setIsSavingBalance] = useState(false);
 
   useEffect(() => {
     fetchAdminUserDetail(resolvedParams.id)
@@ -37,9 +45,17 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
       })
       .catch((err) => {
         console.error("Failed to load user detail", err);
+        toast.error("Failed to load user details: " + err.message);
         setLoading(false);
       });
   }, [resolvedParams.id]);
+
+  // Set initial limit when user loads
+  useEffect(() => {
+    if (user && limitInput === "") {
+      setLimitInput(user.limit?.toString() || "0");
+    }
+  }, [user]);
 
   if (loading) return <div className="p-8 text-center text-gray-400">Loading user details...</div>;
   if (!user) return <div className="p-8 text-center text-red-400">User not found</div>;
@@ -66,18 +82,23 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
             <div className="flex-1">
               <p className="text-sm text-gray-400 mb-2">Block or unblock this user account immediately.</p>
               <button 
+                disabled={isBlocking}
                 onClick={async () => {
                   try {
+                    setIsBlocking(true);
                     const newStatus = !user.is_blocked;
                     await blockAdminUser(user.id, newStatus);
                     setUser({ ...user, is_blocked: newStatus });
-                    alert(`User successfully ${newStatus ? 'blocked' : 'unblocked'}.`);
-                  } catch(e) {
-                    alert("Failed to block/unblock user.");
+                    toast.success(`User successfully ${newStatus ? 'blocked' : 'unblocked'}.`);
+                  } catch(e: any) {
+                    toast.error("Failed to block/unblock user: " + e.message);
+                  } finally {
+                    setIsBlocking(false);
                   }
                 }}
-                className={`px-6 py-2.5 rounded-lg font-bold transition-all ${user.is_blocked ? 'bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'bg-white/10 hover:bg-red-500/20 hover:text-red-500 text-white'}`}
+                className={`px-6 py-2.5 rounded-lg font-bold transition-all flex items-center gap-2 ${user.is_blocked ? 'bg-red-500 text-white shadow-[0_0_15px_rgba(239,68,68,0.4)]' : 'bg-white/10 hover:bg-red-500/20 hover:text-red-500 text-white'} disabled:opacity-50`}
               >
+                {isBlocking && <Loader2 className="w-4 h-4 animate-spin" />}
                 {user.is_blocked ? "ACCOUNT BLOCKED (Click to Unblock)" : "BLOCK ACCOUNT"}
               </button>
             </div>
@@ -86,24 +107,30 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
                <div className="flex gap-2">
                  <input 
                    type="number" 
-                   id="limitInput"
-                   defaultValue={user.limit || 0}
+                   value={limitInput}
+                   onChange={(e) => setLimitInput(e.target.value)}
                    className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white flex-1"
                    placeholder="Enter new limit"
                  />
                  <button 
+                   disabled={isSavingLimit}
                    onClick={async () => {
-                     const inputVal = (document.getElementById('limitInput') as HTMLInputElement).value;
+                     const val = parseInt(limitInput);
+                     if (isNaN(val) || val < 0) return toast.error("Enter a valid positive limit.");
                      try {
-                       await setAdminUserLimit(user.id, parseInt(inputVal) || 0);
-                       setUser({ ...user, limit: parseInt(inputVal) || 0 });
-                       alert("User limit updated.");
-                     } catch(e) {
-                       alert("Failed to update limit.");
+                       setIsSavingLimit(true);
+                       await setAdminUserLimit(user.id, val);
+                       setUser({ ...user, limit: val });
+                       toast.success("User limit updated successfully.");
+                     } catch(e: any) {
+                       toast.error("Failed to update limit: " + e.message);
+                     } finally {
+                       setIsSavingLimit(false);
                      }
                    }}
-                   className="px-4 py-2 bg-neon-blue/20 text-neon-blue font-bold rounded-lg hover:bg-neon-blue/30 transition-colors"
+                   className="px-4 py-2 bg-neon-blue/20 text-neon-blue font-bold rounded-lg hover:bg-neon-blue/30 transition-colors flex items-center gap-2 disabled:opacity-50"
                  >
+                   {isSavingLimit && <Loader2 className="w-4 h-4 animate-spin" />}
                    Save Limit
                  </button>
                </div>
@@ -115,27 +142,32 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
             <div className="flex flex-col sm:flex-row gap-2 max-w-md">
               <input 
                 type="number" 
-                id="balanceInput"
+                value={balanceInput}
+                onChange={(e) => setBalanceInput(e.target.value)}
                 className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white flex-1"
                 placeholder="Amount (e.g. 500 or -500)"
               />
               <button 
+                disabled={isSavingBalance}
                 onClick={async () => {
-                  const inputVal = (document.getElementById('balanceInput') as HTMLInputElement).value;
-                  const amt = parseInt(inputVal);
-                  if (isNaN(amt) || amt === 0) return alert("Enter a valid non-zero amount.");
+                  const amt = parseInt(balanceInput);
+                  if (isNaN(amt) || amt === 0) return toast.error("Enter a valid non-zero amount.");
                   
                   try {
+                    setIsSavingBalance(true);
                     await addAdminUserBalance(user.id, amt);
                     setUser({ ...user, balance_cached: (user.balance_cached || 0) + amt });
-                    (document.getElementById('balanceInput') as HTMLInputElement).value = "";
-                    alert(`Successfully ${amt > 0 ? 'added' : 'deducted'} ₹${Math.abs(amt)}.`);
-                  } catch(e) {
-                    alert("Failed to update balance.");
+                    setBalanceInput("");
+                    toast.success(`Successfully ${amt > 0 ? 'added' : 'deducted'} ₹${Math.abs(amt)}.`);
+                  } catch(e: any) {
+                    toast.error("Failed to update balance: " + e.message);
+                  } finally {
+                    setIsSavingBalance(false);
                   }
                 }}
-                className="px-6 py-2 bg-neon-emerald/20 text-neon-emerald font-bold rounded-lg hover:bg-neon-emerald/30 transition-colors whitespace-nowrap"
+                className="px-6 py-2 bg-neon-emerald/20 text-neon-emerald font-bold rounded-lg hover:bg-neon-emerald/30 transition-colors whitespace-nowrap flex items-center gap-2 disabled:opacity-50"
               >
+                {isSavingBalance && <Loader2 className="w-4 h-4 animate-spin" />}
                 Apply Balance
               </button>
             </div>

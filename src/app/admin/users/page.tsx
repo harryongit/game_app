@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Search, Filter, MoreHorizontal, ShieldCheck, ShieldAlert, Ban, Eye } from "lucide-react";
 import { fetchAdminUsers } from "@/lib/api";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -17,6 +18,7 @@ export default function UsersPage() {
       })
       .catch((err) => {
         console.error("Failed to load users", err);
+        toast.error("Failed to load users: " + err.message);
         setLoading(false);
       });
   }, []);
