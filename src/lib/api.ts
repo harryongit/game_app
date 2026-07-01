@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8080"; // Or env var
+const API_BASE_URL = "http://187.127.162.32"; // Or env var
 
 export async function fetchAdminStats() {
   const res = await fetch(`${API_BASE_URL}/admin/stats`, { cache: 'no-store' });
@@ -52,24 +52,24 @@ export async function updateAdminTransactionStatus(id: string, status: string) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status }),
   });
-	if (!res.ok) throw new Error("Failed to update transaction status");
-	return res.json();
+  if (!res.ok) throw new Error("Failed to update transaction status");
+  return res.json();
 }
 
 export async function fetchGatewayBalance() {
-	const res = await fetch(`${API_BASE_URL}/admin/gateway-balance`, { cache: 'no-store' });
-	if (!res.ok) throw new Error("Failed to fetch gateway balance");
-	return res.json();
+  const res = await fetch(`${API_BASE_URL}/admin/gateway-balance`, { cache: 'no-store' });
+  if (!res.ok) throw new Error("Failed to fetch gateway balance");
+  return res.json();
 }
 
 export async function fetchAdminBets() {
-	const res = await fetch(`${API_BASE_URL}/admin/bets`, { cache: 'no-store' });
-	if (!res.ok) throw new Error("Failed to fetch admin bets");
-	return res.json();
+  const res = await fetch(`${API_BASE_URL}/admin/bets`, { cache: 'no-store' });
+  if (!res.ok) throw new Error("Failed to fetch admin bets");
+  return res.json();
 }
 
 export async function fetchAdminRounds() {
-	const res = await fetch(`${API_BASE_URL}/admin/rounds`, { cache: 'no-store' });
-	if (!res.ok) throw new Error("Failed to fetch admin rounds");
-	return res.json();
+  const res = await fetch(`${API_BASE_URL}/admin/rounds`, { cache: 'no-store' });
+  if (!res.ok) throw new Error("Failed to fetch admin rounds");
+  return res.json();
 }
