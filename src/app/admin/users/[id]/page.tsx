@@ -112,7 +112,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
           
           <div className="mt-6 pt-6 border-t border-red-500/10">
             <p className="text-sm text-gray-400 mb-2">Manually Add or Deduct Balance</p>
-            <div className="flex gap-2 max-w-md">
+            <div className="flex flex-col sm:flex-row gap-2 max-w-md">
               <input 
                 type="number" 
                 id="balanceInput"
