@@ -60,6 +60,16 @@ export async function setAdminUserLimit(userId: number, limit: number) {
   return res.json();
 }
 
+export async function addAdminUserBalance(userId: number, amount: number) {
+  const res = await fetch(`${API_BASE_URL}/admin/user/balance`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId, amount }),
+  });
+  if (!res.ok) throw new Error("Failed to add user balance");
+  return res.json();
+}
+
 export async function fetchAdminTransactions() {
   const res = await fetch(`${API_BASE_URL}/admin/transactions`, { cache: 'no-store' });
   if (!res.ok) throw new Error("Failed to fetch admin transactions");

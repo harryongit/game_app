@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, use, useMemo } from "react";
-import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit } from "@/lib/api";
+import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit, addAdminUserBalance } from "@/lib/api";
 import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 
@@ -108,6 +108,38 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
                  </button>
                </div>
             </div>
+          </div>
+          
+          <div className="mt-6 pt-6 border-t border-red-500/10">
+            <p className="text-sm text-gray-400 mb-2">Manually Add or Deduct Balance</p>
+            <div className="flex gap-2 max-w-md">
+              <input 
+                type="number" 
+                id="balanceInput"
+                className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white flex-1"
+                placeholder="Amount (e.g. 500 or -500)"
+              />
+              <button 
+                onClick={async () => {
+                  const inputVal = (document.getElementById('balanceInput') as HTMLInputElement).value;
+                  const amt = parseInt(inputVal);
+                  if (isNaN(amt) || amt === 0) return alert("Enter a valid non-zero amount.");
+                  
+                  try {
+                    await addAdminUserBalance(user.id, amt);
+                    setUser({ ...user, balance_cached: (user.balance_cached || 0) + amt });
+                    (document.getElementById('balanceInput') as HTMLInputElement).value = "";
+                    alert(`Successfully ${amt > 0 ? 'added' : 'deducted'} ₹${Math.abs(amt)}.`);
+                  } catch(e) {
+                    alert("Failed to update balance.");
+                  }
+                }}
+                className="px-6 py-2 bg-neon-emerald/20 text-neon-emerald font-bold rounded-lg hover:bg-neon-emerald/30 transition-colors whitespace-nowrap"
+              >
+                Apply Balance
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 mt-2">Note: This will automatically record a deposit/withdrawal in the system ledger for auditability.</p>
           </div>
         </div>
 
