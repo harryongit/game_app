@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { fetchAdminAuditLogs } from "@/lib/api";
 import { Loader2, ClipboardList, Clock, User, Info } from "lucide-react";
-import { format } from "date-fns";
 
 export default function AuditLogsPage() {
   const [logs, setLogs] = useState<any[]>([]);
@@ -95,7 +94,14 @@ export default function AuditLogsPage() {
                     <td className="px-6 py-4 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1.5 text-gray-400">
                         <Clock className="w-3.5 h-3.5" />
-                        {format(new Date(log.created_at), "dd MMM yyyy, hh:mm a")}
+                        {new Date(log.created_at).toLocaleString("en-IN", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
                       </div>
                     </td>
                   </tr>
