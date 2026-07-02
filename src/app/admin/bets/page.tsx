@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Search, Filter, Coins, CheckCircle, XCircle, Clock } from "lucide-react";
 import { fetchAdminBets } from "@/lib/api";
+import { formatIST } from "@/utils/dateFormatter";
 
 export default function BetsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -151,7 +152,7 @@ export default function BetsPage() {
                     {bet.status === "lost" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold border border-red-500/20"><XCircle className="w-3 h-3" /> Lost</span>}
                     {bet.status === "pending" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold border border-yellow-500/20"><Clock className="w-3 h-3" /> Pending</span>}
                   </td>
-                  <td className="p-4 text-sm text-gray-500">{new Date(bet.time).toLocaleTimeString()}</td>
+                  <td className="p-4 text-sm text-gray-500">{formatIST(bet.time)}</td>
                 </tr>
               ))}
               {filteredBets.length === 0 && !loading && (

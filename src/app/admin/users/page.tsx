@@ -5,6 +5,7 @@ import { Search, Filter, MoreHorizontal, ShieldCheck, ShieldAlert, Ban, Eye } fr
 import { fetchAdminUsers } from "@/lib/api";
 import Link from "next/link";
 import { toast } from "sonner";
+import { formatIST } from "@/utils/dateFormatter";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -75,7 +76,7 @@ export default function UsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-500">
-                      {new Date(user.created_at).toLocaleDateString()}
+                      {formatIST(user.created_at)}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <Link href={`/admin/users/${user.id}`} className="p-2 inline-block text-gray-500 hover:text-white transition-colors">

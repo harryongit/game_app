@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { ArrowUpRight, ArrowDownLeft, Search, Filter, RefreshCw, CheckCircle, XCircle, Loader2 } from "lucide-react";
-import { fetchAdminTransactions, updateAdminTransactionStatus } from "@/lib/api";
+import { updateAdminTransactionStatus, fetchAdminTransactions } from "@/lib/api";
 import { toast } from "sonner";
+import { formatIST } from "@/utils/dateFormatter";
 
 export default function TransactionsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -173,7 +174,7 @@ export default function TransactionsPage() {
                       {tx.status === "pending" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold border border-yellow-500/20"><RefreshCw className="w-3 h-3 animate-spin" /> Pending</span>}
                     </td>
                     <td className="p-4 text-gray-500 text-sm">
-                      {new Date(tx.created_at).toLocaleString()}
+                      {formatIST(tx.created_at)}
                     </td>
                     <td className="p-4 text-right">
                       {tx.status === "pending" ? (

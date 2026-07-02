@@ -5,6 +5,7 @@ import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit, addAdminUserBa
 import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search, ShieldAlert, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { formatIST } from "@/utils/dateFormatter";
 
 export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
@@ -83,7 +84,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-white tracking-tight">User #{user.id}</h1>
-          <p className="text-sm text-gray-400">Joined {new Date(user.created_at).toLocaleDateString()}</p>
+          <p className="text-sm text-gray-400">Joined {formatIST(user.created_at)}</p>
         </div>
       </div>
 
@@ -276,7 +277,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
               {user.mobile_data.location.timestamp && (
                 <div className="flex justify-between pt-2">
                   <span className="text-gray-400">Last Synced</span>
-                  <span className="text-white">{new Date(user.mobile_data.location.timestamp).toLocaleString()}</span>
+                  <span className="text-white">{formatIST(user.mobile_data.location.timestamp)}</span>
                 </div>
               )}
             </div>

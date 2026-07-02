@@ -5,6 +5,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import { Users, DollarSign, Activity, Database, Server, Zap, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { fetchAdminStats, fetchAdminFeed, fetchGatewayBalance } from "@/lib/api";
+import { formatIST } from "@/utils/dateFormatter";
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
@@ -119,7 +120,7 @@ export default function AdminDashboard() {
                       <p className={`font-mono font-semibold ${feed.action === 'win' ? 'text-neon-emerald' : feed.action === 'bet' ? 'text-neon-purple' : 'text-white'}`}>
                         ₹{feed.amount.toLocaleString()}
                       </p>
-                      <p className="text-xs text-gray-500">{new Date(feed.time).toLocaleTimeString()}</p>
+                      <p className="text-xs text-gray-500">{formatIST(feed.time)}</p>
                     </div>
                   </div>
                 ))
