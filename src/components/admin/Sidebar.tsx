@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, PlayCircle, Coins, Wallet, Users, 
   ArrowRightLeft, BarChart3, Bell, ShieldAlert, Settings,
-  LogOut, Hexagon, X, ClipboardList
+  LogOut, Hexagon, X, ClipboardList, Database
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { name: "Notifications", href: "/admin/notifications", icon: Bell },
   { name: "Admin Controls", href: "/admin/controls", icon: ShieldAlert },
+  { name: "Database", href: "/admin/database", icon: Database },
   { name: "Audit Logs", href: "/admin/audit-logs", icon: ClipboardList },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
