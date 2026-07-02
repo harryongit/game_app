@@ -44,7 +44,7 @@ export default function DatabaseExplorer() {
         router.push("/admin/login");
         return;
       }
-      const res = await fetch("http://localhost:8080/admin/db/tables", {
+      const res = await fetch("/api-proxy/admin/db/tables", {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.status === 401 || res.status === 403) {
@@ -70,7 +70,7 @@ export default function DatabaseExplorer() {
     setError(null);
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await fetch(`http://localhost:8080/admin/db/tables/${tableName}?limit=${limit}&offset=${newOffset}`, {
+      const res = await fetch(`/api-proxy/admin/db/tables/${tableName}?limit=${limit}&offset=${newOffset}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
