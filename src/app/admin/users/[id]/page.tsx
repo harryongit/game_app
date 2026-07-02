@@ -191,6 +191,45 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
           </div>
         </div>
 
+        {/* Financial Summary (PnL) */}
+        {user.financials && (
+          <div className="glass-panel p-6 rounded-xl space-y-6 md:col-span-2 border border-white/10">
+            <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+              <Wallet className="w-6 h-6 text-neon-emerald" /> Lifetime Financial Summary
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                <div className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Total Deposits</div>
+                <div className="text-lg font-black text-neon-emerald">₹{(user.financials.total_deposits || 0).toLocaleString()}</div>
+              </div>
+              <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                <div className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Total Withdrawals</div>
+                <div className="text-lg font-black text-neon-purple">₹{(user.financials.total_withdrawals || 0).toLocaleString()}</div>
+              </div>
+              <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                <div className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Lifetime Bets</div>
+                <div className="text-lg font-black text-neon-blue">₹{(user.financials.lifetime_bets || 0).toLocaleString()}</div>
+              </div>
+              <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                <div className="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Lifetime Wins</div>
+                <div className="text-lg font-black text-neon-emerald">₹{(user.financials.lifetime_payouts || 0).toLocaleString()}</div>
+              </div>
+              
+              <div className={`p-4 rounded-xl border relative overflow-hidden ${user.financials.net_profit > 0 ? 'bg-neon-emerald/10 border-neon-emerald/30' : user.financials.net_profit < 0 ? 'bg-red-500/10 border-red-500/30' : 'bg-white/5 border-white/10'}`}>
+                <div className="text-xs uppercase font-bold tracking-wider mb-1 z-10 relative text-gray-300">
+                  Net Profit
+                </div>
+                <div className={`text-xl font-black z-10 relative ${user.financials.net_profit > 0 ? 'text-neon-emerald' : user.financials.net_profit < 0 ? 'text-red-500' : 'text-white'}`}>
+                  {user.financials.net_profit > 0 ? '+' : ''}₹{(user.financials.net_profit || 0).toLocaleString()}
+                </div>
+                <div className="text-[10px] text-gray-400 mt-1 z-10 relative">
+                  {user.financials.net_profit > 0 ? "User is beating the house" : user.financials.net_profit < 0 ? "House is profiting off user" : "Break Even"}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Basic Info */}
         <div className="glass-panel p-6 rounded-xl space-y-4">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">

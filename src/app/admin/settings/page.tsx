@@ -10,7 +10,11 @@ export default function SettingsPage() {
     platform_name: "ProfitKing",
     support_email: "support@ProfitKing.com",
     withdrawal_fee_percent: "2.5",
-    min_withdrawal: "1000"
+    min_withdrawal: "1000",
+    promotions: {
+      deposit_bonus_percent: "0",
+      welcome_bonus_amount: "0"
+    }
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -24,7 +28,11 @@ export default function SettingsPage() {
     try {
       const data = await fetchAdminSettings();
       if (data && Object.keys(data).length > 0) {
-        setSettings((prev: any) => ({ ...prev, ...data }));
+        let parsedSettings = { ...data };
+        if (typeof data.promotions === 'string') {
+          parsedSettings.promotions = JSON.parse(data.promotions);
+        }
+        setSettings((prev: any) => ({ ...prev, ...parsedSettings }));
       }
     } catch (err: any) {
       console.error("Failed to fetch settings", err);
@@ -38,10 +46,24 @@ export default function SettingsPage() {
     setSettings((prev: any) => ({ ...prev, [key]: value }));
   };
 
+  const handlePromotionChange = (key: string, value: string) => {
+    setSettings((prev: any) => ({ 
+      ...prev, 
+      promotions: {
+        ...(prev.promotions || {}),
+        [key]: value
+      }
+    }));
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
-      await updateAdminSettings(settings);
+      const payload = { ...settings };
+      if (payload.promotions) {
+        payload.promotions = JSON.stringify(payload.promotions);
+      }
+      await updateAdminSettings(payload);
       toast.success("Settings saved successfully!");
     } catch (err: any) {
       console.error("Failed to save", err);
@@ -116,7 +138,39 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
+        <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
+        <div className="p-6 border-b border-white/5">
+          <h2 className="text-xl font-bold text-white text-neon-magenta drop-shadow-[0_0_8px_rgba(233,64,218,0.5)]">Promotions & Bonuses</h2>
+        </div>
+        <div className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Deposit Bonus (%)</label>
+              <input 
+                type="number" 
+                value={settings.promotions?.deposit_bonus_percent || "0"}
+                onChange={(e) => handlePromotionChange("deposit_bonus_percent", e.target.value)}
+                className="w-full bg-white/5 border border-neon-magenta/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-magenta" 
+                placeholder="0"
+              />
+              <p className="text-xs text-gray-500">Percentage added automatically to every deposit.</p>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Welcome Bonus (₹)</label>
+              <input 
+                type="number" 
+                value={settings.promotions?.welcome_bonus_amount || "0"}
+                onChange={(e) => handlePromotionChange("welcome_bonus_amount", e.target.value)}
+                className="w-full bg-white/5 border border-neon-magenta/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-magenta"
+                placeholder="0" 
+              />
+              <p className="text-xs text-gray-500">Fixed amount given on signup (Requires backend integration later).</p>
+            </div>
+          </div>
+        </div>
       </div>
+
+    </div>
 
       <div className="flex justify-end">
         <button 

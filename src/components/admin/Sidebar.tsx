@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, PlayCircle, Coins, Wallet, Users, 
   ArrowRightLeft, BarChart3, Bell, ShieldAlert, Settings,
-  LogOut, Hexagon, X
+  LogOut, Hexagon, X, ClipboardList
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { name: "Notifications", href: "/admin/notifications", icon: Bell },
   { name: "Admin Controls", href: "/admin/controls", icon: ShieldAlert },
+  { name: "Audit Logs", href: "/admin/audit-logs", icon: ClipboardList },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
@@ -63,8 +64,9 @@ export function Sidebar({ onCloseMobile }: { onCloseMobile?: () => void }) {
       <div className="p-4 border-t border-white/5 shrink-0">
         <button 
           onClick={() => {
-            document.cookie = "admin_session=; path=/; max-age=0;";
-            router.push("/login");
+            localStorage.removeItem("adminToken");
+            localStorage.removeItem("adminUser");
+            router.push("/admin/login");
           }}
           className="flex items-center gap-3 w-full px-3 py-2 text-gray-400 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
         >

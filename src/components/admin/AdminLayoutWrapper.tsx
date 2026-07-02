@@ -1,11 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
+import { usePathname, useRouter } from "next/navigation";
 
 export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    if (pathname === '/admin/login') {
+      setIsAuthenticated(true);
+      return;
+    }
+    const token = localStorage.getItem("adminToken");
+    if (!token) {
+      router.push("/admin/login");
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [pathname, router]);
+
+  if (!isAuthenticated) {
+    return <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white">Loading...</div>;
+  }
+
+  // If on login page, just render children without sidebar/navbar
+  if (pathname === '/admin/login') {
+    return (
+      <div className="min-h-screen bg-[#050505] flex">
+        <div className="fixed inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#050505] flex">
