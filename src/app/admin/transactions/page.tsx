@@ -163,6 +163,11 @@ export default function TransactionsPage() {
                           </div>
                           <span className="font-semibold capitalize">Withdrawal</span>
                         </div>
+                        {tx.type === "withdrawal" && tx.upi_id && (
+                          <div className="mt-2 text-xs text-neon-purple/70 font-mono bg-neon-purple/5 px-2 py-1 rounded">
+                            UPI: {tx.upi_id}
+                          </div>
+                        )}
                       )}
                     </td>
                     <td className="p-4 font-mono text-sm text-gray-400">#{tx.id}</td>
