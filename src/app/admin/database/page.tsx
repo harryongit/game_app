@@ -77,7 +77,10 @@ export default function DatabaseExplorer() {
       if (data.error) {
         setError(data.error);
       } else {
-        setTableData(data);
+        setTableData({
+          ...data,
+          rows: data.rows || []
+        });
         setOffset(newOffset);
       }
     } catch (err) {
