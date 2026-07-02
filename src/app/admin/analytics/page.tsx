@@ -117,7 +117,7 @@ export default function AnalyticsPage() {
                   dataKey="value"
                   stroke="none"
                 >
-                  {gameData.map((entry, index) => (
+                  {gameData.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
@@ -127,7 +127,7 @@ export default function AnalyticsPage() {
               </PieChart>
             </ResponsiveContainer>
             <div className="w-full mt-4 flex justify-center gap-4 flex-wrap">
-              {gameData.map((entry, i) => (
+              {gameData.map((entry: any, i: number) => (
                 <div key={entry.name} className="flex items-center gap-2 text-xs text-gray-400">
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[i] }} />
                   {entry.name} ({entry.value} bets)
