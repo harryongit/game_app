@@ -157,17 +157,19 @@ export default function TransactionsPage() {
                           <span className="font-semibold capitalize">Deposit</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-2 text-neon-purple">
-                          <div className="w-8 h-8 rounded-full bg-neon-purple/10 flex items-center justify-center">
-                            <ArrowUpRight className="w-4 h-4" />
+                        <>
+                          <div className="flex items-center gap-2 text-neon-purple">
+                            <div className="w-8 h-8 rounded-full bg-neon-purple/10 flex items-center justify-center">
+                              <ArrowUpRight className="w-4 h-4" />
+                            </div>
+                            <span className="font-semibold capitalize">Withdrawal</span>
                           </div>
-                          <span className="font-semibold capitalize">Withdrawal</span>
-                        </div>
-                        {tx.type === "withdrawal" && tx.upi_id && (
-                          <div className="mt-2 text-xs text-neon-purple/70 font-mono bg-neon-purple/5 px-2 py-1 rounded">
-                            UPI: {tx.upi_id}
-                          </div>
-                        )}
+                          {tx.type === "withdrawal" && tx.upi_id && (
+                            <div className="mt-2 text-xs text-neon-purple/70 font-mono bg-neon-purple/5 px-2 py-1 rounded">
+                              UPI: {tx.upi_id}
+                            </div>
+                          )}
+                        </>
                       )}
                     </td>
                     <td className="p-4 font-mono text-sm text-gray-400">#{tx.id}</td>
