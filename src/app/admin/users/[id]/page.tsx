@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, use, useMemo } from "react";
-import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit, addAdminUserBalance } from "@/lib/api";
+import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit } from "@/lib/api";
 import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search, ShieldAlert, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -18,10 +18,8 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
   
   // Admin Action States
   const [limitInput, setLimitInput] = useState<string>("");
-  const [balanceInput, setBalanceInput] = useState<string>("");
   const [isBlocking, setIsBlocking] = useState(false);
   const [isSavingLimit, setIsSavingLimit] = useState(false);
-  const [isSavingBalance, setIsSavingBalance] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
 
   useEffect(() => {
@@ -153,42 +151,7 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
             </div>
           </div>
           
-          <div className="mt-6 pt-6 border-t border-red-500/10">
-            <p className="text-sm text-gray-400 mb-2">Manually Add or Deduct Balance</p>
-            <div className="flex flex-col sm:flex-row gap-2 max-w-md">
-              <input 
-                type="number" 
-                value={balanceInput}
-                onChange={(e) => setBalanceInput(e.target.value)}
-                className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white flex-1"
-                placeholder="Amount (e.g. 500 or -500)"
-              />
-              <button 
-                disabled={isSavingBalance}
-                onClick={async () => {
-                  const amt = parseInt(balanceInput);
-                  if (isNaN(amt) || amt === 0) return toast.error("Enter a valid non-zero amount.");
-                  
-                  try {
-                    setIsSavingBalance(true);
-                    await addAdminUserBalance(user.id, amt);
-                    setUser({ ...user, balance_cached: (user.balance_cached || 0) + amt });
-                    setBalanceInput("");
-                    toast.success(`Successfully ${amt > 0 ? 'added' : 'deducted'} ₹${Math.abs(amt)}.`);
-                  } catch(e: any) {
-                    toast.error("Failed to update balance: " + e.message);
-                  } finally {
-                    setIsSavingBalance(false);
-                  }
-                }}
-                className="px-6 py-2 bg-neon-emerald/20 text-neon-emerald font-bold rounded-lg hover:bg-neon-emerald/30 transition-colors whitespace-nowrap flex items-center gap-2 disabled:opacity-50"
-              >
-                {isSavingBalance && <Loader2 className="w-4 h-4 animate-spin" />}
-                Apply Balance
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">Note: This will automatically record a deposit/withdrawal in the system ledger for auditability.</p>
-          </div>
+
         </div>
 
         {/* Financial Summary (PnL) */}

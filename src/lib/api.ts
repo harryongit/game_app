@@ -94,14 +94,6 @@ export async function setAdminUserLimit(userId: number, limit: number) {
   return handleResponse(res, "Failed to set user limit");
 }
 
-export async function addAdminUserBalance(userId: number, amount: number) {
-  const res = await fetch(`${API_BASE_URL}/admin/user/balance`, {
-    method: 'POST',
-    headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
-    body: JSON.stringify({ user_id: userId, amount }),
-  });
-  return handleResponse(res, "Failed to add user balance");
-}
 
 export async function fetchAdminTransactions(startDate?: string, endDate?: string) {
   let url = `${API_BASE_URL}/admin/transactions`;
