@@ -176,8 +176,8 @@ export default function TransactionsPage() {
                     <td className="p-4 font-medium text-white">{tx.username || "Anonymous"}</td>
                     <td className="p-4 font-bold text-white">₹{Math.abs(tx.amount)}</td>
                     <td className="p-4">
-                      {tx.status === "success" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neon-emerald/10 text-neon-emerald text-xs font-bold border border-neon-emerald/20"><CheckCircle className="w-3 h-3" /> Approved</span>}
-                      {tx.status === "failed" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold border border-red-500/20"><XCircle className="w-3 h-3" /> Rejected</span>}
+                      {tx.status === "success" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neon-emerald/10 text-neon-emerald text-xs font-bold border border-neon-emerald/20"><CheckCircle className="w-3 h-3" /> Success</span>}
+                      {tx.status === "failed" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 text-red-500 text-xs font-bold border border-red-500/20"><XCircle className="w-3 h-3" /> Failed</span>}
                       {tx.status === "pending" && <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-yellow-500/10 text-yellow-500 text-xs font-bold border border-yellow-500/20"><RefreshCw className="w-3 h-3 animate-spin" /> Pending</span>}
                     </td>
                     <td className="p-4 text-gray-500 text-sm">
@@ -185,24 +185,28 @@ export default function TransactionsPage() {
                     </td>
                     <td className="p-4 text-right">
                       {tx.status === "pending" ? (
-                        <div className="flex justify-end gap-2">
-                          <button 
-                            disabled={processingId === tx.id}
-                            onClick={() => handleUpdateStatus(tx.id, "success")}
-                            className="p-2 bg-neon-emerald/10 hover:bg-neon-emerald/20 text-neon-emerald rounded-lg transition-colors border border-neon-emerald/20 disabled:opacity-50"
-                            title="Approve"
-                          >
-                            {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
-                          </button>
-                          <button 
-                            disabled={processingId === tx.id}
-                            onClick={() => handleUpdateStatus(tx.id, "failed")}
-                            className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors border border-red-500/20 disabled:opacity-50"
-                            title="Reject"
-                          >
-                            {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
-                          </button>
-                        </div>
+                        tx.type === "withdrawal" ? (
+                          <div className="flex justify-end gap-2">
+                            <button 
+                              disabled={processingId === tx.id}
+                              onClick={() => handleUpdateStatus(tx.id, "success")}
+                              className="p-2 bg-neon-emerald/10 hover:bg-neon-emerald/20 text-neon-emerald rounded-lg transition-colors border border-neon-emerald/20 disabled:opacity-50"
+                              title="Approve"
+                            >
+                              {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+                            </button>
+                            <button 
+                              disabled={processingId === tx.id}
+                              onClick={() => handleUpdateStatus(tx.id, "failed")}
+                              className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors border border-red-500/20 disabled:opacity-50"
+                              title="Reject"
+                            >
+                              {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-gray-600 text-sm italic">Auto-processing</span>
+                        )
                       ) : (
                         <span className="text-gray-600 text-sm italic">Processed</span>
                       )}
