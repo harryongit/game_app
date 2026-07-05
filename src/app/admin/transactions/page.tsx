@@ -191,7 +191,7 @@ export default function TransactionsPage() {
                               disabled={processingId === tx.id}
                               onClick={() => handleUpdateStatus(tx.id, "success")}
                               className="p-2 bg-neon-emerald/10 hover:bg-neon-emerald/20 text-neon-emerald rounded-lg transition-colors border border-neon-emerald/20 disabled:opacity-50"
-                              title="Approve"
+                              title="Approve & Send via Cashfree"
                             >
                               {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
                             </button>
@@ -199,13 +199,23 @@ export default function TransactionsPage() {
                               disabled={processingId === tx.id}
                               onClick={() => handleUpdateStatus(tx.id, "failed")}
                               className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors border border-red-500/20 disabled:opacity-50"
-                              title="Reject"
+                              title="Reject & Refund"
                             >
                               {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
                             </button>
                           </div>
                         ) : (
-                          <span className="text-gray-600 text-sm italic">Auto-processing</span>
+                          <div className="flex justify-end gap-2">
+                            <span className="text-xs text-gray-500 italic mr-2">Auto-verifying via Cashfree</span>
+                            <button 
+                              disabled={processingId === tx.id}
+                              onClick={() => handleUpdateStatus(tx.id, "failed")}
+                              className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg transition-colors border border-red-500/20 disabled:opacity-50"
+                              title="Cancel Deposit"
+                            >
+                              {processingId === tx.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
+                            </button>
+                          </div>
                         )
                       ) : (
                         <span className="text-gray-600 text-sm italic">Processed</span>
