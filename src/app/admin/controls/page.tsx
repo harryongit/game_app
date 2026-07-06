@@ -8,7 +8,7 @@ import { toast } from "sonner";
 export default function GameControlsPage() {
   const [config, setConfig] = useState<any>({
     mode: "profit_driven",
-    target_margin: 20,
+    target_margin: 30,
     multipliers: {
       "1x": 80,
       "2x": 15,
@@ -94,14 +94,14 @@ export default function GameControlsPage() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">Game Controls & Profit Engine</h1>
-        <p className="text-gray-400">Manage the Spin Wheel algorithm, multipliers, and house edge.</p>
+        <h1 className="text-3xl font-bold text-white mb-2">Game Settings</h1>
+        <p className="text-gray-400">Manage the Spin Wheel game, multipliers, and house profit.</p>
       </div>
 
       <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
         <div className="p-6 border-b border-white/5 flex items-center gap-3">
           <Settings2 className="w-5 h-5 text-neon-blue" />
-          <h2 className="text-xl font-bold text-white">Algorithm Mode</h2>
+          <h2 className="text-xl font-bold text-white">Game Fairness Mode</h2>
         </div>
         <div className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -114,7 +114,7 @@ export default function GameControlsPage() {
                 <h3 className="font-bold text-white text-lg">Fair Mode (Pure Random)</h3>
               </div>
               <p className="text-sm text-gray-400 ml-7">
-                The spin wheel result is purely random based on the multiplier weights. The house does not intervene, leaving profit to statistical variance.
+                The game is completely random. The house takes a chance and profit is not guaranteed.
               </p>
             </div>
             
@@ -127,7 +127,7 @@ export default function GameControlsPage() {
                 <h3 className="font-bold text-white text-lg">Profit Driven (House Mode)</h3>
               </div>
               <p className="text-sm text-gray-400 ml-7">
-                The algorithm mathematically evaluates all user bets before spinning and actively prevents outcomes that would breach the target house margin.
+                The system checks all bets and guarantees you never lose money beyond the profit margin.
               </p>
             </div>
           </div>
@@ -142,13 +142,13 @@ export default function GameControlsPage() {
           <div className="p-6 border-b border-white/5 relative z-10">
             <h2 className="text-xl font-bold text-white flex items-center gap-3">
               <Percent className="w-5 h-5 text-neon-magenta" />
-              Target House Margin (RTP Control)
+              House Profit Settings
             </h2>
           </div>
           <div className="p-6 relative z-10">
             <div className="max-w-md space-y-4">
               <label className="block text-sm font-semibold text-gray-400">
-                Guaranteed House Margin (%)
+                House Profit Percentage (%)
               </label>
               <div className="flex items-center gap-4">
                 <input 
@@ -164,7 +164,7 @@ export default function GameControlsPage() {
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-2">
-                Example: At 20%, the algorithm will ensure that the total payout to users is NEVER more than 80% of the total bets placed in that round.
+                Example: At 30%, the house will take exactly 30% of all bets, and distribute the rest to winners.
               </p>
             </div>
           </div>
