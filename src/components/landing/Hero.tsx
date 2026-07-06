@@ -47,13 +47,14 @@ export function Hero() {
                 Claim Free Spin <ChevronRight className="w-5 h-5" />
               </span>
             </motion.button>
-            <motion.button
+            <motion.a
+              href="https://github.com/harryongit/game_app/releases/latest/download/app-release.apk"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 rounded-xl font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 backdrop-blur-sm transition-colors duration-300"
+              className="px-8 py-4 rounded-xl font-bold text-white bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 backdrop-blur-sm transition-colors duration-300 flex items-center justify-center"
             >
-              Start Playing
-            </motion.button>
+              Download App
+            </motion.a>
           </div>
         </motion.div>
 
