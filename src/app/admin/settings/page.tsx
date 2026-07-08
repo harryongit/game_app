@@ -14,6 +14,15 @@ export default function SettingsPage() {
     promotions: {
       deposit_bonus_percent: "0",
       welcome_bonus_amount: "0"
+    },
+    spinwheel_config: {
+      mode: "profit_driven",
+      target_margin: 30,
+      multipliers: {
+        "1x": 80,
+        "2x": 15,
+        "3x": 5
+      }
     }
   });
   const [loading, setLoading] = useState(true);
@@ -34,6 +43,9 @@ export default function SettingsPage() {
         }
         if (typeof data.boommine === 'string') {
           parsedSettings.boommine = JSON.parse(data.boommine);
+        }
+        if (typeof data.spinwheel_config === 'string') {
+          parsedSettings.spinwheel_config = JSON.parse(data.spinwheel_config);
         }
         setSettings((prev: any) => ({ ...prev, ...parsedSettings }));
       }
@@ -69,6 +81,16 @@ export default function SettingsPage() {
     }));
   };
 
+  const handleSpinwheelChange = (key: string, value: string | number) => {
+    setSettings((prev: any) => ({
+      ...prev,
+      spinwheel_config: {
+        ...(prev.spinwheel_config || {}),
+        [key]: value
+      }
+    }));
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -78,6 +100,9 @@ export default function SettingsPage() {
       }
       if (payload.boommine) {
         payload.boommine = JSON.stringify(payload.boommine);
+      }
+      if (payload.spinwheel_config) {
+        payload.spinwheel_config = JSON.stringify(payload.spinwheel_config);
       }
       await updateAdminSettings(payload);
       toast.success("Settings saved successfully!");
@@ -215,6 +240,38 @@ export default function SettingsPage() {
                 className="w-full bg-white/5 border border-neon-emerald/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-emerald"
               />
               <p className="text-xs text-gray-500">E.g., 0.10 means a 10% chance to secretly force a bomb on a safe tile.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
+        <div className="p-6 border-b border-white/5">
+          <h2 className="text-xl font-bold text-white text-amber-500 drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]">SpinWheel Settings</h2>
+        </div>
+        <div className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Target Profit Margin (%)</label>
+              <input 
+                type="number" 
+                value={settings.spinwheel_config?.target_margin ?? "30"}
+                onChange={(e) => handleSpinwheelChange("target_margin", parseInt(e.target.value) || 0)}
+                className="w-full bg-white/5 border border-amber-500/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500" 
+              />
+              <p className="text-xs text-gray-500">Guarantees the house keeps this % of the pool on average.</p>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Logic Mode</label>
+              <select 
+                value={settings.spinwheel_config?.mode ?? "profit_driven"}
+                onChange={(e) => handleSpinwheelChange("mode", e.target.value)}
+                className="w-full bg-[#111827] border border-amber-500/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"
+              >
+                <option value="profit_driven">Profit Driven (Rigged)</option>
+                <option value="random">Random (Fair)</option>
+              </select>
+              <p className="text-xs text-gray-500">Determines if the wheel is rigged for profit or completely random.</p>
             </div>
           </div>
         </div>
