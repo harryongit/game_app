@@ -77,6 +77,7 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="glass-panel p-6 rounded-2xl border border-white/5 lg:col-span-2">
           <h2 className="text-xl font-bold text-white mb-6">7-Day Profit & Loss</h2>
           <div className="h-[300px] w-full">
