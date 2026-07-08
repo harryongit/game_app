@@ -32,6 +32,9 @@ export default function SettingsPage() {
         if (typeof data.promotions === 'string') {
           parsedSettings.promotions = JSON.parse(data.promotions);
         }
+        if (typeof data.boommine === 'string') {
+          parsedSettings.boommine = JSON.parse(data.boommine);
+        }
         setSettings((prev: any) => ({ ...prev, ...parsedSettings }));
       }
     } catch (err: any) {
@@ -56,12 +59,25 @@ export default function SettingsPage() {
     }));
   };
 
+  const handleBoommineChange = (key: string, value: string) => {
+    setSettings((prev: any) => ({ 
+      ...prev, 
+      boommine: {
+        ...(prev.boommine || {}),
+        [key]: value === "" ? "" : parseFloat(value)
+      }
+    }));
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
       const payload = { ...settings };
       if (payload.promotions) {
         payload.promotions = JSON.stringify(payload.promotions);
+      }
+      if (payload.boommine) {
+        payload.boommine = JSON.stringify(payload.boommine);
       }
       await updateAdminSettings(payload);
       toast.success("Settings saved successfully!");
@@ -138,7 +154,9 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
-        <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
+      </div>
+      
+      <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
         <div className="p-6 border-b border-white/5">
           <h2 className="text-xl font-bold text-white text-neon-magenta drop-shadow-[0_0_8px_rgba(233,64,218,0.5)]">Promotions & Bonuses</h2>
         </div>
@@ -170,7 +188,37 @@ export default function SettingsPage() {
         </div>
       </div>
 
-    </div>
+      <div className="glass-panel rounded-2xl border border-white/5 overflow-hidden">
+        <div className="p-6 border-b border-white/5">
+          <h2 className="text-xl font-bold text-white text-neon-emerald drop-shadow-[0_0_8px_rgba(0,255,170,0.5)]">Boom Mine Settings</h2>
+        </div>
+        <div className="p-6 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">House Edge Multiplier</label>
+              <input 
+                type="number" 
+                step="0.01"
+                value={settings.boommine?.house_edge ?? "0.97"}
+                onChange={(e) => handleBoommineChange("house_edge", e.target.value)}
+                className="w-full bg-white/5 border border-neon-emerald/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-emerald" 
+              />
+              <p className="text-xs text-gray-500">E.g., 0.95 means a 5% house edge on all payouts.</p>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Rig Probability (Guaranteed Loss)</label>
+              <input 
+                type="number" 
+                step="0.01"
+                value={settings.boommine?.rig_probability ?? "0.0"}
+                onChange={(e) => handleBoommineChange("rig_probability", e.target.value)}
+                className="w-full bg-white/5 border border-neon-emerald/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-emerald"
+              />
+              <p className="text-xs text-gray-500">E.g., 0.10 means a 10% chance to secretly force a bomb on a safe tile.</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="flex justify-end">
         <button 
