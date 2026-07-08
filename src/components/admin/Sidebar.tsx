@@ -67,7 +67,8 @@ export function Sidebar({ onCloseMobile }: { onCloseMobile?: () => void }) {
           onClick={() => {
             localStorage.removeItem("adminToken");
             localStorage.removeItem("adminUser");
-            router.push("/admin/login");
+            document.cookie = "admin_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+            router.push("/login");
           }}
           className="flex items-center gap-3 w-full px-3 py-2 text-gray-400 hover:text-red-400 transition-colors rounded-lg hover:bg-red-500/10"
         >

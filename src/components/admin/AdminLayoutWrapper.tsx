@@ -12,13 +12,13 @@ export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    if (pathname === '/admin/login') {
+    if (pathname === '/login') {
       setIsAuthenticated(true);
       return;
     }
     const token = localStorage.getItem("adminToken");
     if (!token) {
-      router.push("/admin/login");
+      router.push("/login");
     } else {
       setIsAuthenticated(true);
     }
@@ -29,7 +29,7 @@ export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) 
   }
 
   // If on login page, just render children without sidebar/navbar
-  if (pathname === '/admin/login') {
+  if (pathname === '/login') {
     return (
       <div className="min-h-screen bg-[#050505] flex">
         <div className="fixed inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
@@ -42,10 +42,10 @@ export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) 
     <div className="min-h-screen bg-[#050505] flex">
       {/* Background Grid */}
       <div className="fixed inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-      
+
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />

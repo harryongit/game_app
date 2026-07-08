@@ -16,15 +16,30 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    // Simulate slight delay for effect
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    try {
+      const res = await fetch('/api-proxy/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
 
-    if (username === "admin" && password === "admin") {
-      // Set cookie (valid for 1 day)
-      document.cookie = "admin_session=true; path=/; max-age=86400; SameSite=Strict";
-      router.push("/admin");
-    } else {
-      setError("Invalid username or password.");
+      if (!res.ok) {
+        throw new Error('Invalid username or password.');
+      }
+
+      const data = await res.json();
+      
+      if (data.token) {
+        // Save the real JWT in cookies
+        document.cookie = `admin_token=${data.token}; path=/; max-age=86400; SameSite=Strict`;
+        localStorage.setItem("adminToken", data.token);
+        router.push("/admin");
+      } else {
+        throw new Error('Login successful but no token received.');
+      }
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during login.');
+    } finally {
       setLoading(false);
     }
   };
