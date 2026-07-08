@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, PlayCircle, Coins, Wallet, Users, 
   ArrowRightLeft, BarChart3, Bell, ShieldAlert, Settings,
-  LogOut, Hexagon, X, ClipboardList, Database
+  LogOut, Hexagon, X, ClipboardList, Database, Bomb
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -18,6 +18,7 @@ const NAV_ITEMS = [
   { name: "Transactions", href: "/admin/transactions", icon: ArrowRightLeft },
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { name: "Notifications", href: "/admin/notifications", icon: Bell },
+  { name: "BoomMine Stats", href: "/admin/boommine", icon: Bomb },
   { name: "Admin Controls", href: "/admin/controls", icon: ShieldAlert },
   { name: "Database", href: "/admin/database", icon: Database },
   { name: "Audit Logs", href: "/admin/audit-logs", icon: ClipboardList },
