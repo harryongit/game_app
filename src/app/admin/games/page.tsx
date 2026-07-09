@@ -110,9 +110,9 @@ export default function GameOperationsPage() {
     setSaving(true);
     try {
       const payload = {
-        spinwheel_config: JSON.stringify(config),
-        boommine: JSON.stringify(boommine),
-        tosstoss: JSON.stringify(tosstoss)
+        spinwheel_config: config,
+        boommine: boommine,
+        tosstoss: tosstoss
       };
       await updateAdminSettings(payload);
       toast.success("Game controls saved successfully!");

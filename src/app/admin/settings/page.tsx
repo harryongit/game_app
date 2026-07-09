@@ -73,12 +73,6 @@ export default function SettingsPage() {
     setSaving(true);
     try {
       const payload = { ...settings };
-      if (payload.promotions) {
-        payload.promotions = JSON.stringify(payload.promotions);
-      }
-      if (payload.promotions) {
-        payload.promotions = JSON.stringify(payload.promotions);
-      }
       await updateAdminSettings(payload);
       toast.success("Settings saved successfully!");
     } catch (err: any) {
