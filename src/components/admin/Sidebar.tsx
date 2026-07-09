@@ -53,7 +53,7 @@ const NAV_GROUPS = [
   {
     label: "Management",
     items: [
-      { name: "Global Bets", href: "/admin/globalbets", icon: Coins },
+      { name: "Global Bets", href: "/admin/bets", icon: Coins },
       { name: "Wallets", href: "/admin/wallet", icon: Wallet },
       { name: "Users", href: "/admin/users", icon: Users },
       { name: "Transactions", href: "/admin/transactions", icon: ArrowRightLeft },
