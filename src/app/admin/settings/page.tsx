@@ -59,16 +59,6 @@ export default function SettingsPage() {
     }));
   };
 
-  const handlePromotionChange = (key: string, value: string) => {
-    setSettings((prev: any) => ({ 
-      ...prev, 
-      promotions: {
-        ...(prev.promotions || {}),
-        [key]: value
-      }
-    }));
-  };
-
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -182,8 +172,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-        </div>
-      </div>
+
 
       <div className="flex justify-end">
         <button 
