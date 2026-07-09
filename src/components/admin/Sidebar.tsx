@@ -19,7 +19,7 @@ const NAV_ITEMS = [
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { name: "Notifications", href: "/admin/notifications", icon: Bell },
   { name: "BoomMine Stats", href: "/admin/boommine", icon: Bomb },
-  { name: "Admin Controls", href: "/admin/controls", icon: ShieldAlert },
+  { name: "Game Operations", href: "/admin/games", icon: ShieldAlert },
   { name: "Database", href: "/admin/database", icon: Database },
   { name: "Audit Logs", href: "/admin/audit-logs", icon: ClipboardList },
   { name: "Settings", href: "/admin/settings", icon: Settings },
