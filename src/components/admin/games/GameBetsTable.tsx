@@ -21,7 +21,7 @@ export function GameBetsTable({ gameType, title = "Live Bets" }: { gameType: str
   const fetchBets = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await fetch(`http://localhost:8080/admin/games/${gameType}/bets?limit=50`, {
+      const res = await fetch(`/api-proxy/admin/games/${gameType}/bets?limit=50`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {

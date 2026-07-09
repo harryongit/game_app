@@ -20,7 +20,7 @@ export function GameRoundsTable({ gameType, title = "Live Rounds" }: { gameType:
   const fetchRounds = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await fetch(`http://localhost:8080/admin/games/${gameType}/rounds?limit=50`, {
+      const res = await fetch(`/api-proxy/admin/games/${gameType}/rounds?limit=50`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {

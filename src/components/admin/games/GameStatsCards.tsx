@@ -18,7 +18,7 @@ export function GameStatsCards({ gameType }: { gameType: string }) {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem("adminToken");
-      const res = await fetch(`http://localhost:8080/admin/games/${gameType}/stats`, {
+      const res = await fetch(`/api-proxy/admin/games/${gameType}/stats`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
