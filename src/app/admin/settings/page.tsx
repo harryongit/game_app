@@ -7,8 +7,8 @@ import { toast } from "sonner";
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<any>({
-    platform_name: "ProfitKing",
-    support_email: "support@ProfitKing.com",
+    platform_name: "RealSpinPro",
+    support_email: "support@RealSpinPro.com",
     withdrawal_fee_percent: "2.5",
     min_withdrawal: "1000",
     promotions: {

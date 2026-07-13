@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "BoomMine | ProfitKing — Mines Game",
+  title: "BoomMine | RealSpinPro — Mines Game",
   description: "Navigate the minefield. Reveal gems, multiply your winnings, and cash out before hitting a bomb.",
 };
 

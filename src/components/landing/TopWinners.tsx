@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 import { Trophy, TrendingUp, Medal } from "lucide-react";
 
 const WINNERS = [
-  { rank: 1, user: "Rahul K.", game: "Kalyan Matka", multiplier: "1,250x", payout: "₹1,25,000", color: "neon-blue" },
-  { rank: 2, user: "Vikram S.", game: "Milan Day", multiplier: "850x", payout: "₹85,000", color: "neon-purple" },
-  { rank: 3, user: "Pooja M.", game: "Rajdhani Night", multiplier: "500x", payout: "₹50,000", color: "neon-emerald" },
-  { rank: 4, user: "Amit D.", game: "Kalyan Night", multiplier: "250x", payout: "₹25,000", color: "white" },
-  { rank: 5, user: "Suresh P.", game: "Main Bazar", multiplier: "100x", payout: "₹10,000", color: "white" },
+  { rank: 1, user: "Rahul K.", game: "Boommine", multiplier: "1,250x", payout: "₹1,25,000", color: "neon-blue" },
+  { rank: 2, user: "Vikram S.", game: "Pro Spin", multiplier: "850x", payout: "₹85,000", color: "neon-purple" },
+  { rank: 3, user: "Pooja M.", game: "Toss Toss", multiplier: "500x", payout: "₹50,000", color: "neon-emerald" },
+  { rank: 4, user: "Amit D.", game: "Spin Wheel", multiplier: "250x", payout: "₹25,000", color: "white" },
+  { rank: 5, user: "Suresh P.", game: "Boommine", multiplier: "100x", payout: "₹10,000", color: "white" },
 ];
 
 export function TopWinners() {
@@ -41,7 +41,7 @@ export function TopWinners() {
               </thead>
               <tbody className="divide-y divide-white/5">
                 {WINNERS.map((winner, i) => (
-                  <motion.tr 
+                  <motion.tr
                     key={winner.rank}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -61,7 +61,7 @@ export function TopWinners() {
                     <td className="px-6 py-5 font-bold text-white flex items-center gap-3">
                       <div className={`w-8 h-8 rounded-full bg-gradient-to-br from-${winner.color} to-black p-0.5`} style={{ "--color-neon-blue": "#00f3ff", "--color-neon-purple": "#b026ff", "--color-neon-emerald": "#00ff66" } as any}>
                         <div className="w-full h-full bg-black rounded-full flex items-center justify-center text-xs">
-                          {winner.user.substring(0,2).toUpperCase()}
+                          {winner.user.substring(0, 2).toUpperCase()}
                         </div>
                       </div>
                       {winner.user}

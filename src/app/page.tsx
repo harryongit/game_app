@@ -1,7 +1,7 @@
 import { SceneWrapper } from "@/components/canvas/SceneWrapper";
 import { RecentSpinsTicker } from "@/components/landing/RecentSpinsTicker";
 import { Hero } from "@/components/landing/Hero";
-import { SpinWheelShowcase } from "@/components/landing/SpinWheelShowcase";
+import { GamesShowcase } from "@/components/landing/GamesShowcase";
 import { Features } from "@/components/landing/Features";
 import { TopWinners } from "@/components/landing/TopWinners";
 import { Timeline } from "@/components/landing/Timeline";
@@ -15,7 +15,7 @@ export default function Home() {
       <RecentSpinsTicker />
       <SceneWrapper />
       <Hero />
-      <SpinWheelShowcase />
+      <GamesShowcase />
       <Features />
       <TopWinners />
       <Timeline />

@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
             <span className="text-2xl font-bold text-white">PK</span>
           </div>
           <h1 className="text-2xl font-bold text-white mb-2">Admin Portal</h1>
-          <p className="text-white/60 text-sm">Sign in to manage ProfitKing</p>
+          <p className="text-white/60 text-sm">Sign in to manage RealSpinPro</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
