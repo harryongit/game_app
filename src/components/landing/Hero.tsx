@@ -7,7 +7,7 @@ import Image from "next/image";
 export function Hero() {
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-24 pb-8 lg:pt-20 lg:pb-0">
-      <div className="container mx-auto px-4 z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-12">
           
           {/* Left Side: Text Content */}

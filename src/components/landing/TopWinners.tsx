@@ -17,7 +17,7 @@ export function TopWinners() {
       {/* Background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-96 bg-neon-purple/5 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-4 relative z-10 max-w-5xl">
+      <div className="max-w-5xl mx-auto px-4 relative z-10 w-full">
         <div className="text-center mb-16">
           <div className="inline-flex items-center justify-center gap-2 mb-4 px-4 py-2 rounded-full bg-white/5 border border-white/10">
             <Trophy className="w-5 h-5 text-yellow-500" />
