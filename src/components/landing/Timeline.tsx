@@ -27,7 +27,7 @@ const STEPS = [
 export function Timeline() {
   return (
     <section className="py-24 relative bg-black/30">
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="text-center mb-20">
           <p className="text-neon-purple font-semibold tracking-widest uppercase mb-2">HOW TO PLAY</p>
           <h2 className="text-4xl md:text-5xl font-black">START WINNING IN 3 STEPS</h2>

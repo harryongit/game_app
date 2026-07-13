@@ -96,7 +96,8 @@ export function Hero() {
               <Image 
                 src="/logosplash.png" 
                 alt="RealSpinPro Logo" 
-                fill 
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-contain drop-shadow-[0_0_20px_rgba(0,243,255,0.3)] lg:drop-shadow-[0_0_30px_rgba(0,243,255,0.4)] animate-float"
                 priority
               />

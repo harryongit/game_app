@@ -1,6 +1,6 @@
 export default function TermsOfService() {
   return (
-    <main className="min-h-screen pt-32 pb-20 container mx-auto px-4 max-w-4xl">
+    <main className="min-h-screen pt-32 pb-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div className="glass-panel rounded-3xl p-8 md:p-12">
         <h1 className="text-4xl md:text-5xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple">
           Terms of Service

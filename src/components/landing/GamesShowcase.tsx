@@ -68,6 +68,7 @@ export function GamesShowcase() {
                     src={game.image}
                     alt={game.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform duration-500"
                   />
                 </motion.div>

@@ -30,7 +30,7 @@ export function Features() {
     <section className="py-24 relative overflow-hidden bg-black/50">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(176,38,255,0.05)_0%,transparent_70%)] pointer-events-none" />
       
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="text-center mb-16 max-w-2xl mx-auto">
           <h2 className="text-4xl font-bold mb-4">WHY PLAY WITH US?</h2>
           <p className="text-gray-400">The most rewarding, action-packed gaming experience on the planet.</p>
