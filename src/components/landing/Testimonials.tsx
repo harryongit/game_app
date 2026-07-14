@@ -11,12 +11,25 @@ const REVIEWS = [
 
 export function Testimonials() {
   return (
-    <section className="py-24 relative bg-black/60 overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
+    <section className="py-24 relative overflow-hidden bg-[#0c0822]/30">
+      {/* Ambient background glows */}
+      <div className="absolute top-1/2 left-0 w-80 h-80 bg-casino-purple/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/3 right-0 w-80 h-80 bg-casino-red/10 rounded-full blur-[100px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <h2 className="text-4xl font-bold mb-16 text-center">PLAYER VERIFIED</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Title */}
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full border border-casino-gold/30 bg-casino-gold/5 text-casino-gold text-xs font-bold uppercase tracking-wider">
+            ★ VERIFIED REVIEWS ★
+          </div>
+          <h2 className="text-4xl md:text-6xl font-black mb-4 mt-3 text-white">
+            VIP PLAYER <span className="neon-text-gold">FEEDBACK</span>
+          </h2>
+          <p className="text-indigo-200/60 max-w-lg mx-auto text-base">Here is what our VIP High Rollers are saying about the platform speed, interface, and fairness.</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {REVIEWS.map((r, i) => (
             <motion.div
               key={i}
@@ -24,19 +37,36 @@ export function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.2 }}
-              className="glass-panel p-8 rounded-2xl relative group"
+              className="gold-border rounded-3xl p-8 relative group hover:scale-[1.03] transition-transform duration-300 shadow-[0_10px_35px_rgba(0,0,0,0.4)]"
             >
-              <Quote className={`absolute top-6 right-6 w-12 h-12 text-${r.color}/10 group-hover:text-${r.color}/20 transition-colors`} />
-              <p className="text-gray-300 italic mb-6 relative z-10">"{r.text}"</p>
+              {/* Gold Stars */}
+              <div className="flex gap-1 mb-4 text-casino-gold">
+                {[...Array(5)].map((_, idx) => (
+                  <span key={idx} className="text-sm">★</span>
+                ))}
+              </div>
+
+              <Quote className="absolute top-8 right-8 w-10 h-10 text-white/5 group-hover:text-casino-gold/15 transition-colors" />
+              <p className="text-indigo-200/80 italic mb-8 relative z-10 leading-relaxed text-sm">
+                "{r.text}"
+              </p>
+              
               <div className="flex items-center gap-4 mt-auto relative z-10">
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-${r.color} to-black p-0.5 shadow-[0_0_10px_var(--color-${r.color})]`} style={{ "--color-neon-blue": "#00f3ff", "--color-neon-purple": "#b026ff", "--color-neon-emerald": "#00ff66", "--color-neon-magenta": "#ff00ff" } as any}>
-                  <div className="w-full h-full bg-black rounded-full flex items-center justify-center text-xs font-bold text-white">
+                {/* Glowing Avatar border */}
+                <div 
+                  className="w-12 h-12 rounded-full p-0.5"
+                  style={{
+                    background: `linear-gradient(135deg, ${r.color === 'neon-blue' ? '#00f3ff' : r.color === 'neon-purple' ? '#b026ff' : '#00ff66'}, #120b2e)`,
+                    boxShadow: `0 0 10px ${r.color === 'neon-blue' ? 'rgba(0,243,255,0.3)' : r.color === 'neon-purple' ? 'rgba(176,38,255,0.3)' : 'rgba(0,255,102,0.3)'}`
+                  }}
+                >
+                  <div className="w-full h-full bg-[#120b2e] rounded-full flex items-center justify-center text-xs font-black text-white">
                     {r.name.substring(0, 2).toUpperCase()}
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-bold text-white">{r.name}</h4>
-                  <p className={`text-xs text-${r.color}`}>{r.role}</p>
+                  <h4 className="font-extrabold text-white group-hover:text-casino-gold transition-colors font-orbitron text-sm tracking-wide">{r.name}</h4>
+                  <p className="text-[11px] font-black uppercase tracking-wider text-indigo-400">{r.role}</p>
                 </div>
               </div>
             </motion.div>

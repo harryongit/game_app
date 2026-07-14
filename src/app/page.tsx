@@ -1,5 +1,4 @@
 import { SceneWrapper } from "@/components/canvas/SceneWrapper";
-import { RecentSpinsTicker } from "@/components/landing/RecentSpinsTicker";
 import { Hero } from "@/components/landing/Hero";
 import { GamesShowcase } from "@/components/landing/GamesShowcase";
 import { Features } from "@/components/landing/Features";
@@ -11,8 +10,7 @@ import { Footer } from "@/components/landing/Footer";
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen pt-10">
-      <RecentSpinsTicker />
+    <main className="relative min-h-screen">
       <SceneWrapper />
       <Hero />
       <GamesShowcase />
