@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LenisProvider } from "@/components/lenis-provider";
 import { Cursor } from "@/components/Cursor";
+import { FetchTimeoutGuard } from "@/components/FetchTimeoutGuard";
 
 const orbitron = Orbitron({
   variable: "--font-orbitron",
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body suppressHydrationWarning className="min-h-screen bg-background text-foreground antialiased selection:bg-neon-purple selection:text-white">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} forcedTheme="dark">
           <LenisProvider>
+            <FetchTimeoutGuard />
             <Cursor />
             {children}
           </LenisProvider>

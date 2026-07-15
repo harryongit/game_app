@@ -33,12 +33,17 @@ export default function LoginPage() {
         // Save the real JWT in cookies
         document.cookie = `admin_token=${data.token}; path=/; max-age=86400; SameSite=Strict`;
         localStorage.setItem("adminToken", data.token);
+        // Persist a minimal profile so the admin layout guard recognizes the session
+        localStorage.setItem(
+          "adminUser",
+          JSON.stringify({ username: username, role: "admin" })
+        );
         router.push("/admin");
       } else {
         throw new Error('Login successful but no token received.');
       }
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during login.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred during login.');
     } finally {
       setLoading(false);
     }

@@ -13,9 +13,13 @@ export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) 
   const isLoginPage = pathname === "/admin/login" || pathname === "/login";
 
   // Initialize auth state synchronously from localStorage so we never show a stuck "Loading...".
+  // Trust either the persisted admin profile OR the admin token (set by either login page).
   const [isAuthenticated] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
-    return isLoginPage || !!localStorage.getItem("adminUser");
+    if (isLoginPage) return true;
+    const hasSession =
+      !!localStorage.getItem("adminUser") || !!localStorage.getItem("adminToken");
+    return hasSession;
   });
 
   useEffect(() => {
