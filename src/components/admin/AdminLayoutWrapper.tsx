@@ -16,8 +16,8 @@ export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) 
       setIsAuthenticated(true);
       return;
     }
-    const token = localStorage.getItem("adminToken");
-    if (!token) {
+    const user = localStorage.getItem("adminUser");
+    if (!user) {
       router.push("/login");
     } else {
       setIsAuthenticated(true);

@@ -5,7 +5,9 @@ import {
   fetchAdminSupportChats, 
   fetchAdminSupportHistory, 
   sendAdminSupportMessage, 
-  uploadAdminSupportImage 
+  uploadAdminSupportImage,
+  API_BASE_URL,
+  getAdminHeaders
 } from "@/lib/api";
 import { Send, Image as ImageIcon, CheckCircle, Clock, Search, Bot } from "lucide-react";
 
@@ -20,8 +22,9 @@ export default function SupportPage() {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const wsRef = useRef<WebSocket | null>(null);
 
-  // Poll chats list
+  // Fetch initial chats and set up WebSocket
   useEffect(() => {
     const loadChats = async () => {
       try {
@@ -32,19 +35,84 @@ export default function SupportPage() {
       }
     };
     loadChats();
-    const interval = setInterval(loadChats, 5000);
-    return () => clearInterval(interval);
+
+    // Setup WebSocket with absolute URL
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = window.location.host;
+    const wsUrl = `${protocol}//${host}${API_BASE_URL}/admin/support/ws`;
+    const token = localStorage.getItem('adminToken');
+    
+    if (token) {
+      const ws = new WebSocket(`${wsUrl}?token=${token}`);
+      
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          if (data.type === 'new_support_message') {
+            const payload = data.data;
+            if (!payload || !payload.message) return;
+            
+            const newMsg = payload.message;
+            const userId = payload.user_id;
+            
+            // Update messages if this chat is active
+            setMessages(prev => {
+              // Note: selectedUser is captured in closure, so we use a functional update that relies on a ref or we just re-evaluate if we can.
+              // To avoid stale state for selectedUser, we can just let a separate effect handle active chat messages, or update the list directly here.
+              // Wait, functional update doesn't have access to selectedUser without it being in dependency array.
+              return prev;
+            });
+            
+            // We'll handle appending to active messages via a ref or by just letting the chat list update and re-fetching if needed.
+            // Actually, we can dispatch a custom event.
+            window.dispatchEvent(new CustomEvent('new_admin_ws_message', { detail: { userId, message: newMsg } }));
+            
+            // Update chat list
+            setChats(prevChats => {
+              const chatIndex = prevChats.findIndex(c => c.user_id === userId);
+              if (chatIndex >= 0) {
+                const updatedChats = [...prevChats];
+                const chat = updatedChats[chatIndex];
+                chat.last_message = newMsg.message_type === 'text' ? newMsg.content : 'Image attached';
+                chat.last_message_time = newMsg.created_at;
+                chat.updated_at = newMsg.created_at;
+                
+                // If it's from user, increment unread if not selected
+                if (newMsg.sender_type === 'user') {
+                  // We'll rely on the CustomEvent listener to handle unread count accurately.
+                }
+                
+                // Move to top
+                updatedChats.splice(chatIndex, 1);
+                updatedChats.unshift(chat);
+                return updatedChats;
+              }
+              // If new chat, reload list
+              loadChats();
+              return prevChats;
+            });
+          }
+        } catch (e) {
+          console.error("WS Parse error", e);
+        }
+      };
+      
+      wsRef.current = ws;
+      
+      return () => {
+        ws.close();
+      };
+    }
   }, []);
 
-  // Poll selected chat messages
+  // Handle active chat messages and CustomEvent
   useEffect(() => {
     if (!selectedUser) return;
     
-    const loadMessages = async () => {
+    const loadInitialMessages = async () => {
       try {
-        const data = await fetchAdminSupportHistory(selectedUser.user_id);
+        const data = await fetchAdminSupportHistory(selectedUser.user_id, 0); // cursor 0
         if (data && data.messages) {
-          // data.messages is descending, we want ascending for chat window
           setMessages([...data.messages].reverse());
         } else {
           setMessages([]);
@@ -54,9 +122,17 @@ export default function SupportPage() {
       }
     };
     
-    loadMessages();
-    const interval = setInterval(loadMessages, 3000);
-    return () => clearInterval(interval);
+    loadInitialMessages();
+    
+    const handleNewMsg = (e: any) => {
+      const { userId, message } = e.detail;
+      if (userId === selectedUser.user_id) {
+        setMessages(prev => [...prev, message]);
+      }
+    };
+    
+    window.addEventListener('new_admin_ws_message', handleNewMsg);
+    return () => window.removeEventListener('new_admin_ws_message', handleNewMsg);
   }, [selectedUser]);
 
   // Scroll to bottom when new messages arrive
@@ -197,6 +273,9 @@ export default function SupportPage() {
                             src={`/api-proxy${msg.content}`} 
                             alt="Attachment" 
                             className="rounded-lg max-h-60 object-contain mb-2 cursor-pointer"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="%23333"/><text x="50" y="50" fill="%23999" text-anchor="middle" alignment-baseline="middle">Broken Image</text></svg>';
+                            }}
                           />
                         </a>
                       )}

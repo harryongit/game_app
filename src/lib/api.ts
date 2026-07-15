@@ -1,14 +1,13 @@
-const API_BASE_URL = "/api-proxy"; // Uses Next.js rewrites in next.config.ts to avoid mixed-content (HTTP) blocked error
+export const API_BASE_URL = "/api-proxy"; // Uses Next.js rewrites in next.config.ts to avoid mixed-content (HTTP) blocked error
 
 // Helper to get auth headers
-function getAdminHeaders(customHeaders: Record<string, string> = {}): Record<string, string> {
+export function getAdminHeaders(customHeaders: Record<string, string> = {}): Record<string, string> {
   const headers: Record<string, string> = { ...customHeaders };
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem("adminToken");
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
+  // Add CSRF protection header for state-changing endpoints
+  headers['X-Requested-With'] = 'XMLHttpRequest';
+  
+  // The backend will read the token securely from the HttpOnly "admin_token" cookie.
+  // We no longer manually append the Bearer token here.
   return headers;
 }
 // Helper to safely parse and throw meaningful API errors for toast notifications
@@ -36,7 +35,7 @@ async function handleResponse(res: Response, defaultErrorMsg: string) {
 
 export async function fetchAdminStats() {
   const res = await fetch(`${API_BASE_URL}/admin/stats`, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch admin stats");
@@ -44,7 +43,7 @@ export async function fetchAdminStats() {
 
 export async function fetchAdminFeed() {
   const res = await fetch(`${API_BASE_URL}/admin/feed`, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch admin feed");
@@ -52,7 +51,7 @@ export async function fetchAdminFeed() {
 
 export async function fetchAdminSettings() {
   const res = await fetch(`${API_BASE_URL}/admin/settings`, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch admin settings");
@@ -69,7 +68,7 @@ export async function updateAdminSettings(settings: Record<string, any>) {
 
 export async function fetchAdminUsers() {
   const res = await fetch(`${API_BASE_URL}/admin/users`, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch admin users");
@@ -77,7 +76,7 @@ export async function fetchAdminUsers() {
 
 export async function fetchAdminUserDetail(id: string) {
   const res = await fetch(`${API_BASE_URL}/admin/users/${id}`, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch admin user detail");
@@ -110,7 +109,7 @@ export async function fetchAdminTransactions(startDate?: string, endDate?: strin
   if (params.toString()) url += `?${params.toString()}`;
   
   const res = await fetch(url, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch admin transactions");
@@ -127,7 +126,7 @@ export async function updateAdminTransactionStatus(id: string, status: string) {
 
 export async function fetchGatewayBalance() {
   const res = await fetch(`${API_BASE_URL}/admin/gateway-balance`, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch gateway balance");
@@ -141,7 +140,7 @@ export async function fetchAdminBets(startDate?: string, endDate?: string) {
   if (params.toString()) url += `?${params.toString()}`;
 
   const res = await fetch(url, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch admin bets");
@@ -149,7 +148,7 @@ export async function fetchAdminBets(startDate?: string, endDate?: string) {
 
 export async function fetchAdminRounds() {
   const res = await fetch(`${API_BASE_URL}/admin/rounds`, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch admin rounds");
@@ -157,7 +156,7 @@ export async function fetchAdminRounds() {
 
 export async function fetchAdminRoundDetails(id: number) {
   const res = await fetch(`${API_BASE_URL}/admin/rounds/${id}`, { 
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, `Failed to fetch details for round ${id}`);
@@ -166,7 +165,8 @@ export async function fetchAdminRoundDetails(id: number) {
 export async function adminLogin(credentials: any) {
   const res = await fetch(`${API_BASE_URL}/admin/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
     body: JSON.stringify(credentials),
   });
   return handleResponse(res, "Login failed");
@@ -174,7 +174,7 @@ export async function adminLogin(credentials: any) {
 
 export async function fetchAdminAuditLogs() {
   const res = await fetch(`${API_BASE_URL}/admin/audit-logs`, {
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch audit logs");
@@ -182,7 +182,7 @@ export async function fetchAdminAuditLogs() {
 
 export async function fetchAdminSupportChats() {
   const res = await fetch(`${API_BASE_URL}/admin/support/chats`, {
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch support chats");
@@ -190,7 +190,7 @@ export async function fetchAdminSupportChats() {
 
 export async function fetchAdminSupportHistory(userId: number, page: number = 1) {
   const res = await fetch(`${API_BASE_URL}/admin/support/chats/messages?user_id=${userId}&page=${page}`, {
-    cache: 'no-store',
+    credentials: 'include', cache: 'no-store',
     headers: getAdminHeaders()
   });
   return handleResponse(res, "Failed to fetch support chat history");

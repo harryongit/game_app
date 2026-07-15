@@ -127,15 +127,7 @@ export function GamesShowcase() {
                   {game.description}
                 </p>
 
-                {/* Premium Action Button */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full py-3 rounded-xl font-extrabold uppercase tracking-wider text-xs border border-casino-gold/40 text-casino-gold bg-casino-gold/5 group-hover:bg-gradient-to-r group-hover:from-yellow-400 group-hover:to-casino-gold group-hover:text-slate-950 group-hover:border-transparent group-hover:shadow-[0_0_15px_rgba(255,215,0,0.4)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Enter Game</span>
-                </motion.button>
+
 
               </div>
             </motion.div>

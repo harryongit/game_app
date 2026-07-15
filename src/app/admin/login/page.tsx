@@ -18,7 +18,6 @@ export default function AdminLoginPage() {
 
     try {
       const data = await adminLogin({ username, password });
-      localStorage.setItem("adminToken", data.token);
       localStorage.setItem("adminUser", JSON.stringify(data.admin));
       toast.success("Login successful");
       router.push("/admin");
