@@ -9,31 +9,37 @@ export function AdminLayoutWrapper({ children }: { children: React.ReactNode }) 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const isLoginPage = pathname === "/admin/login" || pathname === "/login";
+
+  // Initialize auth state synchronously from localStorage so we never show a stuck "Loading...".
+  const [isAuthenticated] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return isLoginPage || !!localStorage.getItem("adminUser");
+  });
 
   useEffect(() => {
-    if (pathname === '/login') {
-      setIsAuthenticated(true);
-      return;
-    }
+    if (isLoginPage) return;
     const user = localStorage.getItem("adminUser");
     if (!user) {
-      router.push("/login");
-    } else {
-      setIsAuthenticated(true);
+      router.replace("/admin/login");
     }
-  }, [pathname, router]);
-
-  if (!isAuthenticated) {
-    return <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white">Loading...</div>;
-  }
+  }, [isLoginPage, router]);
 
   // If on login page, just render children without sidebar/navbar
-  if (pathname === '/login') {
+  if (isLoginPage) {
     return (
       <div className="min-h-screen bg-[#050505] flex">
         <div className="fixed inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
         {children}
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-t-2 border-r-2 border-neon-blue animate-spin" />
       </div>
     );
   }

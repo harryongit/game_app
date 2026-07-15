@@ -24,8 +24,8 @@ export default function AdminLoginPage() {
       }
       toast.success("Login successful");
       router.push("/admin");
-    } catch (error: any) {
-      toast.error(error.message || "Invalid credentials");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Invalid credentials");
     } finally {
       setIsLoading(false);
     }
