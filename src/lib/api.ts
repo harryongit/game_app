@@ -6,8 +6,13 @@ export function getAdminHeaders(customHeaders: Record<string, string> = {}): Rec
   // Add CSRF protection header for state-changing endpoints
   headers['X-Requested-With'] = 'XMLHttpRequest';
   
-  // The backend will read the token securely from the HttpOnly "admin_token" cookie.
-  // We no longer manually append the Bearer token here.
+  // Read the token securely from the HttpOnly cookie, OR use localStorage fallback for local testing
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem("adminToken");
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
   return headers;
 }
 // Helper to safely parse and throw meaningful API errors for toast notifications
