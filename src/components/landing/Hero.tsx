@@ -76,7 +76,18 @@ export function Hero() {
             Step into a high-stakes, anime-infused gaming wonderland. Experience four custom-crafted games with instant payouts, transparent fair-play, and legendary daily jackpots!
           </p>
 
-          <DownloadButton className="hero-cta" size="lg" />
+          <div className="hero-cta flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <DownloadButton size="lg" />
+            <DownloadButton size="lg" variant="ghost" label="Get APK Link" />
+          </div>
+
+          <p className="hero-cta mt-4 text-xs sm:text-sm text-white/70 flex items-center gap-2">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+            </span>
+            Join 15,000+ players winning daily — free Android app
+          </p>
         </div>
       </div>
     </section>
