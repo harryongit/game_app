@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Trophy, TrendingUp, Award, Activity } from "lucide-react";
+import { Trophy, TrendingUp } from "lucide-react";
+import { DownloadButton } from "@/components/DownloadButton";
 
 const WINNERS = [
   { rank: 1, user: "Rahul K.", game: "Boommine", multiplier: "1,250x", payout: "₹1,25,000", color: "#ffd700", glow: "rgba(255, 215, 0, 0.4)" },
@@ -14,6 +15,9 @@ const WINNERS = [
 export function TopWinners() {
   return (
     <section className="py-24 relative overflow-hidden">
+      {/* Premium gradient backdrop (no image) */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,215,0,0.06)_0%,transparent_55%)] pointer-events-none" />
+
       {/* Background neon flares */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl h-80 bg-neon-pink/5 blur-[120px] rounded-full pointer-events-none" />
 
@@ -131,6 +135,11 @@ export function TopWinners() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Download CTA */}
+          <div className="mt-10 flex justify-center">
+            <DownloadButton size="lg" />
           </div>
         </div>
       </div>

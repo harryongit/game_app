@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
+import { DownloadButton } from "@/components/DownloadButton";
 
 const REVIEWS = [
   { name: "Rahul K.", text: "The app is super fast. Zero delay on my bets and results are instant.", role: "High Roller", color: "neon-blue" },
@@ -48,7 +49,7 @@ export function Testimonials() {
 
               <Quote className="absolute top-8 right-8 w-10 h-10 text-white/5 group-hover:text-casino-gold/15 transition-colors" />
               <p className="text-indigo-200/80 italic mb-8 relative z-10 leading-relaxed text-sm">
-                "{r.text}"
+                &ldquo;{r.text}&rdquo;
               </p>
               
               <div className="flex items-center gap-4 mt-auto relative z-10">
@@ -71,6 +72,11 @@ export function Testimonials() {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Download CTA */}
+        <div className="mt-12 flex justify-center">
+          <DownloadButton size="lg" />
         </div>
       </div>
     </section>

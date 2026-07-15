@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { DownloadButton } from "@/components/DownloadButton";
 
 function AnimatedCounter({ end, prefix = "", suffix = "", duration = 2 }: { end: number, prefix?: string, suffix?: string, duration?: number }) {
   const [count, setCount] = useState(0);
@@ -80,6 +81,11 @@ export function Stats() {
             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-12 h-1 bg-emerald-400/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
 
+        </div>
+
+        {/* Download CTA */}
+        <div className="mt-12 flex justify-center">
+          <DownloadButton size="lg" />
         </div>
       </div>
     </section>

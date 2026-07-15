@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { MessageCircle, Globe, Code } from "lucide-react";
 import Link from "next/link";
+import { DownloadButton } from "@/components/DownloadButton";
 
 export function Footer() {
   return (
@@ -28,6 +27,11 @@ export function Footer() {
             </div>
             <div className="text-[11px] text-indigo-300/50 uppercase tracking-widest font-bold font-orbitron">Secure SSL Encrypted Play</div>
           </div>
+        </div>
+
+        {/* Download CTA */}
+        <div className="mt-12 mb-12 flex justify-center">
+          <DownloadButton size="lg" />
         </div>
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-indigo-300/50">
