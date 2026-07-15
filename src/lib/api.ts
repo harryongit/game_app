@@ -13,18 +13,25 @@ function getAdminHeaders(customHeaders: Record<string, string> = {}): Record<str
 }
 // Helper to safely parse and throw meaningful API errors for toast notifications
 async function handleResponse(res: Response, defaultErrorMsg: string) {
+  const text = await res.text();
   if (!res.ok) {
     try {
-      const errorData = await res.json();
+      const errorData = JSON.parse(text);
       throw new Error(errorData.error || errorData.message || defaultErrorMsg);
     } catch (e: any) {
-      if (e.message && e.message !== 'Unexpected end of JSON input') {
+      if (e.message && e.message !== 'Unexpected end of JSON input' && !e.message.includes('Unexpected token')) {
         throw new Error(e.message);
       }
       throw new Error(defaultErrorMsg);
     }
   }
-  return res.json();
+  
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch (e: any) {
+    console.error(`JSON Parse Error on response: ${text}`);
+    throw e;
+  }
 }
 
 export async function fetchAdminStats() {
@@ -172,3 +179,45 @@ export async function fetchAdminAuditLogs() {
   });
   return handleResponse(res, "Failed to fetch audit logs");
 }
+
+export async function fetchAdminSupportChats() {
+  const res = await fetch(`${API_BASE_URL}/admin/support/chats`, {
+    cache: 'no-store',
+    headers: getAdminHeaders()
+  });
+  return handleResponse(res, "Failed to fetch support chats");
+}
+
+export async function fetchAdminSupportHistory(userId: number, page: number = 1) {
+  const res = await fetch(`${API_BASE_URL}/admin/support/chats/messages?user_id=${userId}&page=${page}`, {
+    cache: 'no-store',
+    headers: getAdminHeaders()
+  });
+  return handleResponse(res, "Failed to fetch support chat history");
+}
+
+export async function sendAdminSupportMessage(userId: number, content: string) {
+  const res = await fetch(`${API_BASE_URL}/admin/support/message`, {
+    method: 'POST',
+    headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
+    body: JSON.stringify({ user_id: userId, content }),
+  });
+  return handleResponse(res, "Failed to send support message");
+}
+
+export async function uploadAdminSupportImage(userId: number, chatId: number, imageFile: File) {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+  formData.append('chat_id', chatId.toString());
+
+  const headers = getAdminHeaders();
+  // Don't set Content-Type for FormData, the browser sets it automatically with boundary
+
+  const res = await fetch(`${API_BASE_URL}/admin/support/image`, {
+    method: 'POST',
+    headers: headers,
+    body: formData,
+  });
+  return handleResponse(res, "Failed to upload image");
+}
+

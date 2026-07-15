@@ -7,7 +7,7 @@ import {
   LayoutDashboard, PlayCircle, Coins, Wallet, Users, 
   ArrowRightLeft, BarChart3, Bell, ShieldAlert, Settings,
   LogOut, Hexagon, X, ClipboardList, Database, Bomb,
-  ChevronDown, ChevronRight
+  ChevronDown, ChevronRight, MessageSquare
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -59,6 +59,7 @@ const NAV_GROUPS = [
       { name: "Transactions", href: "/admin/transactions", icon: ArrowRightLeft },
       { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
       { name: "Notifications", href: "/admin/notifications", icon: Bell },
+      { name: "Support Chat", href: "/admin/support", icon: MessageSquare },
     ]
   },
   {

@@ -5,42 +5,42 @@ import { Play, Sparkles, Trophy } from "lucide-react";
 import Image from "next/image";
 
 const GAMES = [
-  { 
-    id: 1, 
-    name: "Boommine", 
-    image: "/3.png", 
-    description: "Navigate the active minefield and scale up your massive multipliers.", 
-    color: "from-cyan-400 to-blue-500", 
+  {
+    id: 1,
+    name: "Boommine",
+    image: "/boommine.png",
+    description: "Navigate the active minefield and scale up your massive multipliers.",
+    color: "from-cyan-400 to-blue-500",
     glow: "rgba(0, 243, 255, 0.4)",
     tag: "High Stakes",
     badgeColor: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30"
   },
-  { 
-    id: 2, 
-    name: "Pro Spin", 
-    image: "/4.png", 
-    description: "The ultimate royal spinning arena for true premium high rollers.", 
-    color: "from-purple-400 to-indigo-600", 
+  {
+    id: 2,
+    name: "Pro Spin",
+    image: "/prospin.png",
+    description: "The ultimate royal spinning arena for true premium high rollers.",
+    color: "from-purple-400 to-indigo-600",
     glow: "rgba(176, 38, 255, 0.4)",
     tag: "Popular",
     badgeColor: "bg-purple-500/20 text-purple-300 border-purple-500/30"
   },
-  { 
-    id: 3, 
-    name: "Spin Wheel", 
-    image: "/5.png", 
-    description: "Spin the luxurious lucky gold wheel to win daily jackpots.", 
-    color: "from-pink-400 to-rose-600", 
+  {
+    id: 3,
+    name: "Spin Wheel",
+    image: "/spin.png",
+    description: "Spin the luxurious lucky gold wheel to win daily jackpots.",
+    color: "from-pink-400 to-rose-600",
     glow: "rgba(255, 0, 127, 0.4)",
     tag: "Hot Reward",
     badgeColor: "bg-pink-500/20 text-pink-300 border-pink-500/30"
   },
-  { 
-    id: 4, 
-    name: "Toss Toss", 
-    image: "/6.png", 
-    description: "Flip the double-sided gold crest coin and double your fortune.", 
-    color: "from-emerald-400 to-teal-500", 
+  {
+    id: 4,
+    name: "Toss Toss",
+    image: "/toss.png",
+    description: "Flip the double-sided gold crest coin and double your fortune.",
+    color: "from-emerald-400 to-teal-500",
     glow: "rgba(0, 255, 102, 0.4)",
     tag: "Double Up",
     badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
@@ -55,7 +55,7 @@ export function GamesShowcase() {
       <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-casino-red/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        
+
         {/* Section Title */}
         <div className="text-center mb-16 md:mb-20">
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full border border-casino-gold/30 bg-casino-gold/5 text-casino-gold text-xs font-bold tracking-widest uppercase">
@@ -82,9 +82,9 @@ export function GamesShowcase() {
               className="group relative"
             >
               {/* Animated hover glow shadow border */}
-              <div 
+              <div
                 className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl -z-10"
-                style={{ 
+                style={{
                   background: `linear-gradient(135deg, var(--color-casino-gold), ${game.glow})`,
                   transform: "scale(0.95)"
                 }}
@@ -92,9 +92,9 @@ export function GamesShowcase() {
 
               {/* Game Card Container */}
               <div className="luxury-glass rounded-3xl p-6 h-full flex flex-col items-center text-center relative overflow-hidden border border-white/10 group-hover:border-casino-gold/50 transition-all duration-500 group-hover:-translate-y-2.5">
-                
+
                 {/* Colored Spotlight Inside Card */}
-                <div 
+                <div
                   className="absolute top-0 inset-x-0 h-40 opacity-10 group-hover:opacity-25 transition-opacity duration-500 pointer-events-none"
                   style={{ background: `radial-gradient(circle at 50% 0%, ${game.glow}, transparent 70%)` }}
                 />
