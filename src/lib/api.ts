@@ -246,3 +246,11 @@ export async function uploadAdminSupportImage(userId: number, chatId: number, im
   return handleResponse(res, "Failed to upload image");
 }
 
+export async function adminAddUserBalance(userId: number, amount: number, note: string) {
+  const res = await apiFetch(`${API_BASE_URL}/admin/user/add-balance`, {
+    method: 'POST',
+    headers: getAdminHeaders({ 'Content-Type': 'application/json' }),
+    body: JSON.stringify({ user_id: userId, amount, note }),
+  });
+  return handleResponse(res, "Failed to add balance");
+}

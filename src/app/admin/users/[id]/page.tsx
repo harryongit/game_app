@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, use, useMemo } from "react";
-import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit } from "@/lib/api";
-import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search, ShieldAlert, Loader2 } from "lucide-react";
+import { fetchAdminUserDetail, blockAdminUser, setAdminUserLimit, adminAddUserBalance } from "@/lib/api";
+import { ArrowLeft, User, Phone, Mail, Building2, MapPin, Contact, Calendar, Wallet, Search, ShieldAlert, Loader2, PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { formatIST } from "@/utils/dateFormatter";
@@ -21,6 +21,11 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
   const [isBlocking, setIsBlocking] = useState(false);
   const [isSavingLimit, setIsSavingLimit] = useState(false);
   const [address, setAddress] = useState<string | null>(null);
+
+  // Add Money States
+  const [addMoneyAmount, setAddMoneyAmount] = useState<string>("");
+  const [addMoneyNote, setAddMoneyNote] = useState<string>("");
+  const [isAddingMoney, setIsAddingMoney] = useState(false);
 
   useEffect(() => {
     fetchAdminUserDetail(resolvedParams.id)
@@ -150,7 +155,59 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
                </div>
             </div>
           </div>
-          
+
+          {/* Add Money Section */}
+          <div className="border-t border-white/10 pt-5 mt-2">
+            <p className="text-sm font-semibold text-neon-emerald mb-3 flex items-center gap-2">
+              <PlusCircle className="w-4 h-4" /> Add Money to Wallet
+            </p>
+            <p className="text-xs text-gray-500 mb-3">
+              Use this after you have manually sent money to the user via UPI / phone transfer. This will credit the entered amount directly to their in-app wallet.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+              <input
+                id="add-money-amount"
+                type="number"
+                min="1"
+                value={addMoneyAmount}
+                onChange={(e) => setAddMoneyAmount(e.target.value)}
+                className="bg-white/5 border border-neon-emerald/30 focus:border-neon-emerald rounded-lg px-4 py-2 text-white w-full sm:w-40 focus:outline-none transition-colors"
+                placeholder="Amount (₹)"
+              />
+              <input
+                id="add-money-note"
+                type="text"
+                value={addMoneyNote}
+                onChange={(e) => setAddMoneyNote(e.target.value)}
+                className="bg-white/5 border border-white/10 focus:border-neon-emerald/50 rounded-lg px-4 py-2 text-white flex-1 focus:outline-none transition-colors"
+                placeholder="Note (optional, e.g. UPI payment reference)"
+              />
+              <button
+                id="add-money-submit"
+                disabled={isAddingMoney}
+                onClick={async () => {
+                  const val = parseInt(addMoneyAmount);
+                  if (isNaN(val) || val <= 0) return toast.error("Enter a valid amount greater than 0.");
+                  try {
+                    setIsAddingMoney(true);
+                    const result = await adminAddUserBalance(user.id, val, addMoneyNote);
+                    setUser({ ...user, balance_cached: (user.balance_cached || 0) + val });
+                    setAddMoneyAmount("");
+                    setAddMoneyNote("");
+                    toast.success(result?.message || `₹${val} credited successfully!`);
+                  } catch (e: any) {
+                    toast.error("Failed to add money: " + e.message);
+                  } finally {
+                    setIsAddingMoney(false);
+                  }
+                }}
+                className="px-5 py-2 bg-neon-emerald/20 text-neon-emerald font-bold rounded-lg hover:bg-neon-emerald/30 transition-colors flex items-center gap-2 disabled:opacity-50 whitespace-nowrap border border-neon-emerald/30"
+              >
+                {isAddingMoney ? <Loader2 className="w-4 h-4 animate-spin" /> : <PlusCircle className="w-4 h-4" />}
+                Add Money
+              </button>
+            </div>
+          </div>
 
         </div>
 
