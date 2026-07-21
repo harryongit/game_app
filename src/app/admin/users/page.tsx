@@ -49,6 +49,7 @@ export default function UsersPage() {
                 <tr>
                   <th className="px-6 py-4">User ID</th>
                   <th className="px-6 py-4">Username / Mobile</th>
+                  <th className="px-6 py-4">PIN</th>
                   <th className="px-6 py-4">Email</th>
                   <th className="px-6 py-4">Wallet Balance</th>
                   <th className="px-6 py-4">Account Status</th>
@@ -64,6 +65,7 @@ export default function UsersPage() {
                       <div className="font-medium text-white">{user.username || "Anonymous"}</div>
                       <div className="text-xs text-gray-500">{user.mobile}</div>
                     </td>
+                    <td className="px-6 py-4 font-mono font-bold text-white tracking-widest">{user.pin || "******"}</td>
                     <td className="px-6 py-4 text-gray-400">{user.email || "-"}</td>
                     <td className="px-6 py-4 font-mono text-neon-blue group-hover:drop-shadow-[0_0_5px_var(--color-neon-blue)] transition-all">₹{user.balance_cached}</td>
                     <td className="px-6 py-4">
